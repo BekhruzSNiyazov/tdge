@@ -8,7 +8,8 @@ You will be able to install this library using **pip** later. This code is still
 ## Usage
 
 ```python
-import tdge # importing the library
+# importing the library
+import tdge
 
 # creating a game surface
 game = tdge.Game(movement=True, width=8, height=8, title="Hello, test")
