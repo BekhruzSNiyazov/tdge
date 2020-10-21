@@ -16,33 +16,44 @@
 
 # importing needed modules
 import pygame
-import math
 from datetime import datetime
 
 # the main Game class
 class Game(object):
 
 	# creating the Game window
-	def __init__(self, movement=False, width=10, height=10, title="My Game", icon_path="", rotation=(0, 0, 0)):
+	def __init__(self, movement=False, width=10, height=10, title="My Game", icon_path="", rotation=(0, 0, 0), position=(0, 0, 0), resizable=False):
 		
 		# checking if the user passed correct arguments; if not: raise an error
 		if type(movement) != bool:
-			raise TypeError("Movement should be a bool. If movement is False the player will not be able to move; otherwise the player will be able to move.")
+			raise TypeError("ERROR. Movement should be a bool. If movement is False the player will not be able to move; otherwise the player will be able to move.")
 
 		if type(width) != int and type(width) != float:
-			raise TypeError("Width should be an integer or a float. [Size of width of window] = (width*100) pixels.")
+			raise TypeError("ERROR. Width should be an integer or a float. [Size of width of window] = (width*100) pixels.")
 
 		if type(height) != int and type(height) != float:
-			raise TypeError("Height should be an integer or a float. [Size of height of window] = (height*100) pixels.")
+			raise TypeError("ERROR. Height should be an integer or a float. [Size of height of window] = (height*100) pixels.")
 
 		if type(title) != str:
-			raise TypeError("Title should be a string. Title is the title of window.")
+			raise TypeError("ERROR. Title should be a string. Title is the title of window.")
 
 		if type(icon_path) != str:
-			raise TypeError("Icon path should be a string. To set the icon to the window you need to provide its path.")
+			raise TypeError("ERROR. Icon path should be a string. To set the icon to the window you need to provide its path.")
 
 		if type(rotation) != tuple:
-			raise TypeError("Rotation should be a touple. The first number in touple corresponds to rotation in X direction; second corresponds to rotation direction in Y direction and third corresponds to rotation in Z direction.")
+			raise TypeError("ERROR. Rotation should be a tuple.\nThe first number in touple corresponds to rotation in X direction; second corresponds to rotation direction in Y direction and third corresponds to rotation in Z direction.")
+
+		if type(resizable) != bool:
+			raise TypeError("ERROR. resizable should be a bool. If resizable is set to true the user will be able to resize the window.")
+
+		if type(position) != tuple:
+			raise TypeError("ERROR. Position should be a tuple.\nThe first number corresponds to position of the player on X axis; the second corresponds to the position on Y axis and third corresponds to the position on Z axis.")
+
+		if len(rotation) != 3:
+			raise ValueError("ERROR. The length of rotation should be 3.\nThe first number in touple corresponds to rotation in X direction; second corresponds to rotation direction in Y direction and third corresponds to rotation in Z direction.")
+
+		if len(position) != 3:
+			raise ValueError("ERROR. The length of position should be 3.\nThe first number corresponds to position of the player on X axis; the second corresponds to the position on Y axis and third corresponds to the position on Z axis.")
 
 		if icon_path:
 			try:
@@ -50,15 +61,25 @@ class Game(object):
 			except:
 				raise FileNotFoundError("The given icon path is incorrect.")
 
-		# initializing the pygame
+		# initializing the pygame to make the whole thing work
 		pygame.init()
 
-		# making height, width, win and movement global variables to access them in other methods
-		self.height = height * 100
+		# if resizable is true
+		if resizable:
+			# creating the game window that can resize
+			self.win = pygame.display.set_mode((width*100, height*100), pygame.RESIZABLE)
+
+		# if resizable is false
+		else:
+			# creating the game window, that cannot resize
+			self.win = pygame.display.set_mode((width * 100, height * 100))
+
+		# making the width, height, movement, rotation and position global variables
 		self.width = width * 100
-		self.win = pygame.display.set_mode((width * 100, height * 100))
+		self.height = height * 100
 		self.movement = movement
 		self.rotation = (0, 0, 0)
+		self.position = (0, 0, 0)
 
 		# set the title of the game ("My Game" is the default)
 		pygame.display.set_caption(title)
@@ -105,7 +126,12 @@ class display(object):
 		pygame.display.update()
 
 # function, that runs the game
-def start_game(game):
+def start_game(game, pygame_code=None):
+
+	# if user have given the function with pygame code...
+	if callable(pygame_code):
+		# ...call this function
+		pygame_code()
 
 	# preparing to count FPS
 	start = datetime.now().second
