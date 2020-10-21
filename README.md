@@ -30,7 +30,7 @@ tdge.start_game(game)
 ```
 If you want to add some code developed using pygame you can do that easily.
 Just put all pygame code in a function and when you call the start_game() method you need to pass that function as a argument to pygame_code. Here is an example:
-```
+```python
 def code_in_pygame():
     pygame.draw.rect(game.win, (0, 0, 0), (100, 100, 10, 10)) # replace "game" with whatever you assigned the Game object to
     pygame.display.update()
