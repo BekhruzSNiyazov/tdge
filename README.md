@@ -19,12 +19,13 @@ game.disable_movement()
 game.enable_movement()
 
 # you can set the background of the game using set_background() method
+# if you don't want to make the window resizable, set resizable to False, or just skip this argument
 # background_type can be an image or a color
 # if you want to set a background as an image
 # you need to provide image_path argument to the path of image like that:
-tdge.display.set_background(game, background_type="image", image_path="the_path_image")
+tdge.display.set_background(game, background_type="image", image_path="the_path_image", resizable=True)
 # alternatively, you can fill the background with color like that:
-tdge.display.set_background(game, background_type="color", color=(255, 255, 255))
+tdge.display.set_background(game, background_type="color", color=(255, 255, 255), resizable=True)
 # you can draw a cube by calling the draw_cube method()
 tdge.display.draw_cube(game, size=(1, 1, 1), coords=(1, 1, 1), color=(0, 0, 255))
 # to start the game you need to call the start_game() method
