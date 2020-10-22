@@ -21,39 +21,39 @@ from datetime import datetime
 # the main Game class
 class Game(object):
 
-	# creating the Game window
+	# initializing function
 	def __init__(self, movement=False, width=10, height=10, title="My Game", icon_path="", rotation=(0, 0, 0), position=(0, 0, 0), resizable=False):
 		
 		# checking if the user passed correct arguments; if not: raise an error
 		if type(movement) != bool:
-			raise TypeError("ERROR. Movement should be a bool. If movement is False the player will not be able to move; otherwise the player will be able to move.")
+			raise TypeError("Movement should be a bool. If movement is False the player will not be able to move; otherwise the player will be able to move.")
 
 		if type(width) != int and type(width) != float:
-			raise TypeError("ERROR. Width should be an integer or a float. [Size of width of window] = (width*100) pixels.")
+			raise TypeError("Width should be an integer or a float. [Size of width of window] = (width*100) pixels.")
 
 		if type(height) != int and type(height) != float:
-			raise TypeError("ERROR. Height should be an integer or a float. [Size of height of window] = (height*100) pixels.")
+			raise TypeError("Height should be an integer or a float. [Size of height of window] = (height*100) pixels.")
 
 		if type(title) != str:
-			raise TypeError("ERROR. Title should be a string. Title is the title of window.")
+			raise TypeError("Title should be a string. Title is the title of window.")
 
 		if type(icon_path) != str:
-			raise TypeError("ERROR. Icon path should be a string. To set the icon to the window you need to provide its path.")
+			raise TypeError("Icon path should be a string. To set the icon to the window you need to provide its path.")
 
 		if type(rotation) != tuple:
-			raise TypeError("ERROR. Rotation should be a tuple.\nThe first number in touple corresponds to rotation in X direction; second corresponds to rotation direction in Y direction and third corresponds to rotation in Z direction.")
+			raise TypeError("Rotation should be a tuple.\nThe first number in tuple corresponds to rotation in X direction; second corresponds to rotation direction in Y direction and third corresponds to rotation in Z direction.")
 
 		if type(resizable) != bool:
-			raise TypeError("ERROR. resizable should be a bool. If resizable is set to true the user will be able to resize the window.")
+			raise TypeError("resizable should be a bool. If resizable is set to true the user will be able to resize the window.")
 
 		if type(position) != tuple:
-			raise TypeError("ERROR. Position should be a tuple.\nThe first number corresponds to position of the player on X axis; the second corresponds to the position on Y axis and third corresponds to the position on Z axis.")
+			raise TypeError("Position should be a tuple.\nThe first number corresponds to position of the player on X axis; the second corresponds to the position on Y axis and third corresponds to the position on Z axis.")
 
 		if len(rotation) != 3:
-			raise ValueError("ERROR. The length of rotation should be 3.\nThe first number in touple corresponds to rotation in X direction; second corresponds to rotation direction in Y direction and third corresponds to rotation in Z direction.")
+			raise ValueError("The length of rotation should be 3.\nThe first number in tuple corresponds to rotation in X direction; second corresponds to rotation direction in Y direction and third corresponds to rotation in Z direction.")
 
 		if len(position) != 3:
-			raise ValueError("ERROR. The length of position should be 3.\nThe first number corresponds to position of the player on X axis; the second corresponds to the position on Y axis and third corresponds to the position on Z axis.")
+			raise ValueError("The length of position should be 3.\nThe first number corresponds to position of the player on X axis; the second corresponds to the position on Y axis and third corresponds to the position on Z axis.")
 
 		if icon_path:
 			try:
@@ -128,10 +128,20 @@ class display(object):
 # function, that runs the game
 def start_game(game, pygame_code=None):
 
-	# if user have given the function with pygame code...
-	if callable(pygame_code):
-		# ...call this function
-		pygame_code()
+	# checking if user has passed correct arguments
+	if type(game) != Game:
+		raise TypeError("game should be a Game object. To create a Game object you need to import it from this library.")
+
+	if pygame_code is not None:
+		# if user have passed the pygame_code argument but it is not a function...
+		if not callable(pygame_code):
+			# ...raise an error
+			raise TypeError("The pygame_code argument should be a function. Make sure you have not added \"(\" and \")\" (brackets).")
+		# if user have given the function with pygame code...
+		else:
+			# ...call this function
+			pygame_code()
+
 
 	# preparing to count FPS
 	start = datetime.now().second
@@ -165,6 +175,11 @@ def start_game(game, pygame_code=None):
 
 		# increasing FPS because the while loop ended and will start again
 		frame_count += 1
+
+		# if user have added pygame_code as a function...
+		if callable(pygame_code):
+			# ...call it
+			pygame_code()
 
 	# exit the game when it is closed
 	exit()
