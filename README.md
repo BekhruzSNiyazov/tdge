@@ -1,4 +1,4 @@
-# Three D Game Engine (TDGE)
+# 3D Game Engine (TDGE)
 
 TDGE is a Python library for creating 3D Games. **It is still in development**.
 
