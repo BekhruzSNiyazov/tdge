@@ -112,6 +112,10 @@ class display(object):
 		
 		# if the type of the background is an image: set the given image as a background
 		elif background_type == "image":
+			try:
+				open(image_path, "r").close()
+			except:
+				raise FileNotFoundError("The given image path is incorrect.")
 			self.win.blit(pygame.image.load(image_path), (0, 0))
 
 	# drawing the objects on the screen
@@ -187,3 +191,20 @@ def start_game(game, pygame_code=None):
 # class for creating cutom objects
 class CustomObject:
 	pass
+
+# function, that converts hex colors to rgb colors
+def hex_to_rgb(hex):
+	# checking, if the user passed correct argument
+	if type(hex) != str:
+		raise TypeError("You need to pass one argument, which should represent the hex color in a form of string.")
+
+	if hex[0] != "#":
+		raise ValueError("The first argument should represent a hex color in a form of string. The first character should be \"#\".")
+
+	hex = hex.lstrip("#")
+	# if that will not work, return an error
+	try:
+		# returning a converted color
+		return tuple(int(hex[i:i+2], 16) for i in (0, 2, 4))
+	except:
+		raise ValueError("Couldn't convert the given hex color to rgb. Try a different one.")
