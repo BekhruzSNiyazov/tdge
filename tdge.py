@@ -100,9 +100,23 @@ class display(object):
 
 	# changing the background of the game
 	def set_background(self, background_type="color", color=(0, 0, 0), image_path=""):
+
+		# checking, if user have passsed correct arguments
+		if type(background_type) != str:
+			raise TypeError("The backrgound_color argument should be of type str.\nThere are possible values for background_type: \"color\" and \"image\".")
 		
+		if type(color) != tuple:
+			raise TypeError("The color argument should be of type tuple.")
+
+		if type(image_path) != str:
+			raise TypeError("The image_path argument should be of type str.")
+
 		# if the type of the background is a color: fill the background with this color
 		if background_type == "color":
+
+			# warning user if he has passed the image_path argument
+			if image_path != "":
+				print("Warning. You have provided the image_path, while the background_type is set to \"color\".\nIf you want to set an image as a backround you should set background_type to \"image\".")
 
 			# fill the game window with color
 			self.win.fill(color)
@@ -112,6 +126,11 @@ class display(object):
 		
 		# if the type of the background is an image: set the given image as a background
 		elif background_type == "image":
+
+			# warning user if he has passed the color argument
+			if color != (0, 0, 0):
+				print("Warning. You have provided the color, while the background_type is set to \"image\".\nIf you want to fill background with color, you should set background_type to \"color\".")
+
 			try:
 				open(image_path, "r").close()
 			except:
