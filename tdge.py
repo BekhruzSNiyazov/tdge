@@ -29,10 +29,10 @@ class Game(object):
 			raise TypeError("Movement should be a bool. If movement is False the player will not be able to move; otherwise the player will be able to move.")
 
 		if type(width) != int and type(width) != float:
-			raise TypeError("Width should be an integer or a float. [Size of width of window] = (width*100) pixels.")
+			raise TypeError("Width should be an integer or a float. [Size of width of window] = width pixels.")
 
 		if type(height) != int and type(height) != float:
-			raise TypeError("Height should be an integer or a float. [Size of height of window] = (height*100) pixels.")
+			raise TypeError("Height should be an integer or a float. [Size of height of window] = height pixels.")
 
 		if type(title) != str:
 			raise TypeError("Title should be a string. Title is the title of window.")
@@ -72,11 +72,11 @@ class Game(object):
 		# if resizable is false
 		else:
 			# creating the game window, that cannot resize
-			self.win = pygame.display.set_mode((width * 100, height * 100))
+			self.win = pygame.display.set_mode((width, height))
 
 		# making the width, height, movement, rotation and position global variables
-		self.width = width * 100
-		self.height = height * 100
+		self.width = width
+		self.height = height
 		self.movement = movement
 		self.rotation = (0, 0, 0)
 		self.position = (0, 0, 0)
@@ -131,10 +131,13 @@ class display(object):
 			if color != (0, 0, 0):
 				print("Warning. You have provided the color, while the background_type is set to \"image\".\nIf you want to fill background with color, you should set background_type to \"color\".")
 
+			# checking, if the image exists
 			try:
 				open(image_path, "r").close()
 			except:
 				raise FileNotFoundError("The given image path is incorrect.")
+
+			# displaying the image on a screen
 			self.win.blit(pygame.image.load(image_path), (0, 0))
 
 	# drawing the objects on the screen
@@ -151,9 +154,11 @@ class display(object):
 # function, that runs the game
 def start_game(game, pygame_code=None):
 
+	pygame.init()
+
 	# checking if user has passed correct arguments
-	if type(game) != Game:
-		raise TypeError("game should be a Game object. To create a Game object you need to import it from this library.")
+	# if type(game) != Game:
+	# 	raise TypeError("game should be a Game object. To create a Game object you need to import it from this library.")
 
 	if pygame_code is not None:
 		# if user have passed the pygame_code argument but it is not a function...
@@ -165,6 +170,7 @@ def start_game(game, pygame_code=None):
 			# ...call this function
 			pygame_code()
 
+	pygame.display.update() # updating the display to make sure that user can see everything
 
 	# preparing to count FPS
 	start = datetime.now().second
