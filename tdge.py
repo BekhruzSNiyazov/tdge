@@ -211,13 +211,14 @@ def start_game(game, pygame_code=None):
 			pygame_code()
 
 	# exit the game when it is closed
-	exit()
+	pygame.quit()
 
 # class for creating cutom objects
 class CustomObject:
 	pass
 
 # function, that converts hex colors to rgb colors
+# just a nice time saver :)
 def hex_to_rgb(hex):
 	# checking, if the user passed correct argument
 	if type(hex) != str:
