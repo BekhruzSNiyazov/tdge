@@ -1,5 +1,3 @@
-import sys
-sys.path.append("..")
 import tdge
 
 game = tdge.Game(movement=True, width=10, height=10, title="Hello, test", resizable=True)
