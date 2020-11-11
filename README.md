@@ -45,7 +45,7 @@ tdge.start_game(game, pygame_code=code_in_pygame) # you don't need need brackets
 You can view the full documentation of this library [here](https://bekhruzsniyazov.github.io/).
 
 ## License
-This code is licensed with MIT license. I will tell you if you can copy this code or not later, when I will read the license myself.
+This code is licensed with MIT license.
 
 ## Contacts
-If you have any ideas or run in some kind of problem contact me using this email: bekhuzsniyazov@outlook.com. 
+If you have any ideas or ran in any kind of problem contact me using this email: bekhuzsniyazov@outlook.com. 
