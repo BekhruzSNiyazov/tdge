@@ -220,16 +220,16 @@ def start_game(game, pygame_code=None):
 
 			# if the user pressed "w"
 			if keys[pygame.K_w]:
-				game.position = (game.position[0], game.position[1], game.position[2]+1)
+				game.position = (game.position[0], game.position[1], game.position[2] + game.velocity)
 			# if the user pressed "s"
 			if keys[pygame.K_s]:
-				game.position = (game.position[0], game.position[1], game.position[2]-1)
+				game.position = (game.position[0], game.position[1], game.position[2] - game.velocity)
 			# if the user pressed "a"
 			if keys[pygame.K_a]:
-				game.position = (game.position[0]-1, game.position[1], game.position[2])
+				game.position = (game.position[0]-1, game.position[1], game.position[2] - game.velocity)
 			# if the user pressed "d"
 			if keys[pygame.K_d]:
-				game.position = (game.position[0]+1, game.position[1], game.position[2])
+				game.position = (game.position[0]+1, game.position[1], game.position[2] - game.velocity)
 
 			# updating the image that user sees (does not work yet)
 			update(game)
