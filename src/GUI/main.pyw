@@ -5,9 +5,12 @@
 from tkinter import *
 from tkinter import ttk  
 from tkinter.colorchooser import askcolor 
-from ... import tdge as main
 from tkinter.ttk import Radiobutton
 from tkinter import filedialog
+
+import sys
+sys.path.append("..")
+import tdge as main
 
 resizable = False # I have added this line to make resizable True by default
 true = None # I have added this line to make true None by default
