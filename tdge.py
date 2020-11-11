@@ -154,6 +154,9 @@ class display(object):
 # function, that runs the game
 def start_game(game, pygame_code=None):
 
+	# giving the user instructions on how to close the game
+	print("To exit the game press ESC.")
+
 	pygame.init()
 
 	# checking if user has passed correct arguments
