@@ -1,3 +1,7 @@
+"""
+	This code was created by Peter Repiev and edited by Bekhruz Niyazov
+"""
+
 from tkinter import *
 from tkinter import ttk  
 from tkinter.colorchooser import askcolor 
