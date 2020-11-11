@@ -97,10 +97,6 @@ class Game(object):
 	# disable the movement of the player
 	def disable_movement(self):
 		self.movement = False
-
-	# update the location of all objects
-	def update():
-		pass
 	
 # changing the display
 class display(object):
@@ -235,7 +231,7 @@ def start_game(game, pygame_code=None):
 				game.position = (game.position[0]+1, game.position[1], game.position[2])
 
 			# updating the image that user sees (does not work yet)
-			game.update()
+			update(game)
 
 		# increasing FPS because the while loop ended and will start again
 		frame_count += 1
@@ -247,6 +243,10 @@ def start_game(game, pygame_code=None):
 
 	# exit the game when it is closed
 	pygame.quit()
+
+# update the location of all objects
+def update(game):
+	pass
 
 # class for creating cutom objects
 class CustomObject:
