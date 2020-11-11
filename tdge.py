@@ -170,7 +170,8 @@ def start_game(game, pygame_code=None):
 			# ...call this function
 			pygame_code()
 
-	pygame.display.update() # updating the display to make sure that user can see everything
+	# updating the display to make sure that user can see everything
+	pygame.display.update()
 
 	# preparing to count FPS
 	start = datetime.now().second
@@ -179,14 +180,21 @@ def start_game(game, pygame_code=None):
 	# I want the while loop to end first, and then to end the game
 	running = True
 
+	# starting couting frames from 0
 	frame_count = 0
+
 	while running:
 
 		# printing FPS every second
+		# getting the current time
 		now = datetime.now().second
+		# checking, if one second is over
 		if now - start >= 1:
+			# printing FPS
 			print(frame_count)
+			# resetting the timer
 			start = datetime.now().second
+			# resetting the FPS
 			frame_count = 0
 
 		# if clicked the "x" button: quit the game
@@ -220,13 +228,16 @@ class CustomObject:
 # function, that converts hex colors to rgb colors
 # just a nice time saver :)
 def hex_to_rgb(hex):
+	
 	# checking, if the user passed correct argument
 	if type(hex) != str:
 		raise TypeError("You need to pass one argument, which should represent the hex color in a form of string.")
 
+	# if the first character of color is not "#": return an error
 	if hex[0] != "#":
 		raise ValueError("The first argument should represent a hex color in a form of string. The first character should be \"#\".")
 
+	# removing "#" from color
 	hex = hex.lstrip("#")
 	# if that will not work, return an error
 	try:
