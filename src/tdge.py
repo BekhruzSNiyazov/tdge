@@ -97,6 +97,10 @@ class Game(object):
 	# disable the movement of the player
 	def disable_movement(self):
 		self.movement = False
+
+	# update the location of all objects
+	def update():
+		pass
 	
 # changing the display
 class display(object):
@@ -214,7 +218,19 @@ def start_game(game, pygame_code=None):
 
 		# if the movement is enabled: move the user when he presses WASD keys and rotate if he is moving his mouse
 		if game.movement:
-			pass
+			
+			# if user presses WASD keys: update the position of the player
+			if keys[pygame.K_w]:
+				game.position = (game.position[0], game.position[1], game.position[2]+1)
+			if keys[pygame.K_s]:
+				game.position = (game.position[0], game.position[1], game.position[2]-1)
+			if keys[pygame.K_a]:
+				game.position = (game.position[0]-1, game.position[1], game.position[2])
+			if keys[pygame.K_d]:
+				game.position = (game.position[0]+1, game.position[1], game.position[2])
+
+			# updating the image that user sees
+			game.update()
 
 		# increasing FPS because the while loop ended and will start again
 		frame_count += 1
