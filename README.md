@@ -46,3 +46,6 @@ You can view the full documentation of this library [here](https://bekhruzsniyaz
 
 ## License
 This code is licensed with MIT license. I will tell you if you can copy this code or not later, when I will read the license myself.
+
+## Contacts
+If you have any ideas or run in some kind of problem contact me using this email: bekhuzsniyazov@outlook.com. 
