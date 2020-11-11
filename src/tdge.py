@@ -81,6 +81,9 @@ class Game(object):
 		self.rotation = (0, 0, 0)
 		self.position = (0, 0, 0)
 
+		# setting the objects variable to []. it should store all objects in the game
+		self.objects = []
+
 		# set the title of the game ("My Game" is the default)
 		pygame.display.set_caption(title)
 
