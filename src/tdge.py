@@ -22,7 +22,7 @@ from datetime import datetime
 class Game(object):
 
 	# initializing function
-	def __init__(self, movement=False, width=10, height=10, title="My Game", icon_path="", rotation=(0, 0, 0), position=(0, 0, 0), resizable=False):
+	def __init__(self, movement=False, width=10, height=10, title="My Game", icon_path="", rotation=(0, 0, 0), position=(0, 0, 0), resizable=False, velocity=1):
 		
 		# checking if the user passed correct arguments; if not: raise an error
 		if type(movement) != bool:
@@ -74,12 +74,13 @@ class Game(object):
 			# creating the game window, that cannot resize
 			self.win = pygame.display.set_mode((width, height))
 
-		# making the width, height, movement, rotation and position global variables
+		# making the width, height, movement, rotation, position and velocity global variables
 		self.width = width
 		self.height = height
 		self.movement = movement
 		self.rotation = (0, 0, 0)
 		self.position = (0, 0, 0)
+		self.velocity = velocity
 
 		# setting the objects variable to []. it should store all objects in the game
 		self.objects = []
