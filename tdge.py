@@ -157,8 +157,8 @@ def start_game(game, pygame_code=None):
 	pygame.init()
 
 	# checking if user has passed correct arguments
-	# if type(game) != Game:
-	# 	raise TypeError("game should be a Game object. To create a Game object you need to import it from this library.")
+	if type(game) != Game:
+		raise TypeError("game should be a Game object. To create a Game object you need to import it from this library.")
 
 	if pygame_code is not None:
 		# if user have passed the pygame_code argument but it is not a function...
