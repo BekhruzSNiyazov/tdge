@@ -12,8 +12,6 @@
 	You can contact me using this email: bekhruzsniyazov@outlook.com.
 
 	Enjoy using this 3D Game Engine!
-
-	Bekhruz Niyazov, 2020.
 """
 
 # importing needed modules
