@@ -1,4 +1,6 @@
 """
+	Copyright © 2020 Bekhruz Niyazov
+	
 	THIS CODE IS STILL IN DEVELOPMENT
 
 	This code is licensed with MIT license.
