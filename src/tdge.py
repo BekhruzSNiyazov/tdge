@@ -22,7 +22,7 @@ from datetime import datetime
 class Game(object):
 
 	# initializing function
-	def __init__(self, movement=False, width=10, height=10, title="My Game", icon_path="", rotation=(0, 0, 0), position=(0, 0, 0), resizable=False, velocity=1):
+	def __init__(self, movement=False, width=10, height=10, title="My Game", icon_path="", rotation=[0, 0, 0], position=[0, 0, 0], resizable=False, velocity=1):
 		
 		# checking if the user passed correct arguments; if not: raise an error
 		if type(movement) != bool:
@@ -40,17 +40,17 @@ class Game(object):
 		if type(icon_path) != str:
 			raise TypeError("Icon path should be a string. To set the icon to the window you need to provide its path.")
 
-		if type(rotation) != tuple:
-			raise TypeError("Rotation should be a tuple.\nThe first number in tuple corresponds to rotation in X direction; second corresponds to rotation direction in Y direction and third corresponds to rotation in Z direction.")
+		if type(rotation) != list:
+			raise TypeError("Rotation should be a list.\nThe first number in the list corresponds to rotation in X direction; the second corresponds to rotation direction in Y direction and the third corresponds to rotation in Z direction.")
 
 		if type(resizable) != bool:
 			raise TypeError("resizable should be a bool. If resizable is set to true the user will be able to resize the window.")
 
-		if type(position) != tuple:
-			raise TypeError("Position should be a tuple.\nThe first number corresponds to position of the player on X axis; the second corresponds to the position on Y axis and third corresponds to the position on Z axis.")
+		if type(position) != list:
+			raise TypeError("Position should be a list.\nThe first number in the list corresponds to position of the player on X axis; the second corresponds to the position on Y axis and the third corresponds to the position on Z axis.")
 
 		if len(rotation) != 3:
-			raise ValueError("The length of rotation should be 3.\nThe first number in tuple corresponds to rotation in X direction; second corresponds to rotation direction in Y direction and third corresponds to rotation in Z direction.")
+			raise ValueError("The length of rotation should be 3.\nThe first number in the list corresponds to rotation in X direction; second corresponds to rotation direction in Y direction and third corresponds to rotation in Z direction.")
 
 		if len(position) != 3:
 			raise ValueError("The length of position should be 3.\nThe first number corresponds to position of the player on X axis; the second corresponds to the position on Y axis and third corresponds to the position on Z axis.")
@@ -67,7 +67,7 @@ class Game(object):
 		# if resizable is true
 		if resizable:
 			# creating the game window that can resize
-			self.win = pygame.display.set_mode((width*100, height*100), pygame.RESIZABLE)
+			self.win = pygame.display.set_mode((width, height), pygame.RESIZABLE)
 
 		# if resizable is false
 		else:
@@ -78,8 +78,8 @@ class Game(object):
 		self.width = width
 		self.height = height
 		self.movement = movement
-		self.rotation = (0, 0, 0)
-		self.position = (0, 0, 0)
+		self.rotation = rotation
+		self.position = position
 		self.velocity = velocity
 
 		# setting the objects variable to []. it should store all objects in the game
@@ -103,14 +103,14 @@ class Game(object):
 class display(object):
 
 	# changing the background of the game
-	def set_background(self, background_type="color", color=(0, 0, 0), image_path=""):
+	def set_background(self, background_type="color", color=[0, 0, 0], image_path=""):
 
 		# checking, if user have passsed correct arguments
 		if type(background_type) != str:
 			raise TypeError("The backrgound_color argument should be of type str.\nThere are possible values for background_type: \"color\" and \"image\".")
 		
-		if type(color) != tuple:
-			raise TypeError("The color argument should be of type tuple.")
+		if type(color) != list:
+			raise TypeError("The color argument should be of type list.")
 
 		if type(image_path) != str:
 			raise TypeError("The image_path argument should be of type str.")
@@ -132,7 +132,7 @@ class display(object):
 		elif background_type == "image":
 
 			# warning user if he has passed the color argument
-			if color != (0, 0, 0):
+			if color != [0, 0, 0]:
 				print("Warning. You have provided the color, while the background_type is set to \"image\".\nIf you want to fill background with color, you should set background_type to \"color\".")
 
 			# checking, if the image exists
@@ -144,14 +144,16 @@ class display(object):
 			# displaying the image on a screen
 			self.win.blit(pygame.image.load(image_path), (0, 0))
 
-	# drawing the objects on the screen
+	# this function handles the drawing objects on the display
+	def draw(self, object):
 
-	# drawing a cube
-	def draw_cube(self, size=(1, 1, 1), coords=(0, 0, 0), color=(100, 100, 100)):
+		# checking the type of the given object
+		if type(object) == Cube:
+			# drawing a 2D rectangle
+			pygame.draw.rect(self.win, Cube.color, ((Cube.coords[0], Cube.coords[1]), (Cube.size[0], Cube.size[1])))
 
-		# drawing a 2D rectangle
-		pygame.draw.rect(self.win, color, ((coords[0]*100, coords[1]*100), (size[0]*100, size[1]*100)))
-
+		else:
+			raise TypeError("You should provide the object of supported types by this library.")
 		# update the screen so that user will see the difference
 		pygame.display.update()
 
@@ -245,9 +247,34 @@ def start_game(game, pygame_code=None):
 	# exit the game when it is closed
 	pygame.quit()
 
-# update the location of all objects
+# function that handles the update of the location of all objects
 def update(game):
+	# here will go all the code that will handle 3D graphics
 	pass
+
+# class for creating Cube objects
+class Cube(object):
+
+	# initializing function
+	def __init__(self, size=[1, 1, 1], color=[0, 0, 0], coords=[0, 0, 0]):
+
+		# error-checking
+		if type(size) != list:
+			raise TypeError("Size should be a list.\nThe first number in the list corresponds to size on X-axis; the second corresponds to size on Y-axis and the third corresponds to size on Z-axis.")
+		if len(size) != 3:
+			raise ValueError("The length of size should be 3.")
+		if type(color) != list:
+			raise TypeError("Color should be a list.\nThe first number in the list corresponds to the amount of red color (from 0 to 255); the second corresponds to amount of green color (from 0 to 255) and the third corresponds to the amount of blue color (from 0 to 255).")
+		if len(color) != 3:
+			raise ValueError("The length of color should be 3.")
+		for number in color:
+			if number > 255 or number < 0: raise ValueError("Every number in color should be in range 0 and 256 (it should be >= 0 and <= 255).")
+		if type(coords) != list:
+			raise TypeError("Coords should be a list.\nThe first number in the list corresponds to the position on X-axis; the second corresponds to the position on Y-axis and the third corresponds to the position on Z-axis.")
+
+		self.size = size
+		self.color = color
+		self.coords = coords
 
 # class for creating cutom objects
 class CustomObject:
