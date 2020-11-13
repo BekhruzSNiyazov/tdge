@@ -152,10 +152,11 @@ class display(object):
 			# drawing a 2D rectangle
 			pygame.draw.rect(game.win, object.color, ((object.coords[0], object.coords[1]), (object.size[0], object.size[1])))
 
-			game.objects.append(object)
+			if object not in game.objects: game.objects.append(object)
 
 		else:
 			raise TypeError("You should provide the object of supported types by this library.")
+
 		# update the screen so that user will see the difference
 		pygame.display.update()
 
@@ -251,8 +252,9 @@ def start_game(game, pygame_code=None):
 
 # function that handles the update of the location of all objects
 def update(game):
-	# here will go all the code that will handle 3D graphics
-	pass
+	# updating every object in game
+	for object in game.objects:
+		display.draw(game, object)
 
 # class for creating Cube objects
 class Cube(object):
