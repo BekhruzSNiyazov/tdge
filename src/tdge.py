@@ -150,7 +150,7 @@ class display(object):
 		# checking the type of the given object
 		if type(object) == Cube:
 			# drawing a 2D rectangle
-			pygame.draw.rect(self.win, Cube.color, ((Cube.coords[0], Cube.coords[1]), (Cube.size[0], Cube.size[1])))
+			pygame.draw.rect(self.win, object.color, ((object.coords[0], object.coords[1]), (object.size[0], object.size[1])))
 
 		else:
 			raise TypeError("You should provide the object of supported types by this library.")
