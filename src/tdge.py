@@ -266,7 +266,7 @@ def update(game):
 class Cube(object):
 
 	# initializing function
-	def __init__(self, size=[1, 1, 1], color=[0, 0, 0], position=[0, 0, 0]):
+	def __init__(self, size=[100, 100, 100], color=[0, 0, 0], position=[0, 0, 0]):
 
 		# error-checking
 		if type(size) != list:
