@@ -103,7 +103,7 @@ class Game(object):
 class display(object):
 
 	# changing the background of the game
-	def set_background(self, background_type="color", color=[0, 0, 0], image_path=""):
+	def set_background(game, background_type="color", color=[0, 0, 0], image_path=""):
 
 		# checking, if user have passsed correct arguments
 		if type(background_type) != str:
@@ -123,7 +123,7 @@ class display(object):
 				print("Warning. You have provided the image_path, while the background_type is set to \"color\".\nIf you want to set an image as a backround you should set background_type to \"image\".")
 
 			# fill the game window with color
-			self.win.fill(color)
+			game.win.fill(color)
 
 			# update the screen so that user will see the difference
 			pygame.display.update()
@@ -142,15 +142,17 @@ class display(object):
 				raise FileNotFoundError("The given image path is incorrect.")
 
 			# displaying the image on a screen
-			self.win.blit(pygame.image.load(image_path), (0, 0))
+			game.win.blit(pygame.image.load(image_path), (0, 0))
 
 	# this function handles the drawing objects on the display
-	def draw(self, object):
+	def draw(game, object):
 
 		# checking the type of the given object
 		if type(object) == Cube:
 			# drawing a 2D rectangle
-			pygame.draw.rect(self.win, object.color, ((object.coords[0], object.coords[1]), (object.size[0], object.size[1])))
+			pygame.draw.rect(game.win, object.color, ((object.coords[0], object.coords[1]), (object.size[0], object.size[1])))
+
+			game.objects.append(object)
 
 		else:
 			raise TypeError("You should provide the object of supported types by this library.")
