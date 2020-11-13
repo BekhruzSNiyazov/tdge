@@ -7,4 +7,8 @@ cube = Cube([100, 100, 100], color=[255, 255, 255], coords=[200, 200, 100])
 
 display.draw(game, cube)
 
-start_game(game)
+def code():
+    game.win.fill((0, 255, 255))
+    pygame.display.update()
+
+start_game(game, pygame_code=code)
