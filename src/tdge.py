@@ -258,9 +258,9 @@ def update(game):
 	# updating every object in game
 	for object in game.objects:
 		# changing the size of the object
-		object.size = [i + z_offset for i in object.size]
+		object.size = [i - z_offset for i in object.size]
 		# changing the position of the object
-		object.position = [object.position[0] - z_offset / 2, object.position[1] - z_offset / 2, object.position[2]]
+		object.position = [object.position[0] + z_offset / 2, object.position[1] + z_offset / 2, object.position[2]]
 		# drawing the object on the screen
 		display.draw(game, object)
 		# setting the position of the player to [0, 0, 0]
