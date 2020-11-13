@@ -1,6 +1,10 @@
-import tdge
+from pygame import color
+from tdge import *
 
-game = tdge.Game(movement=True, width=10, height=10, title="Hello, test", resizable=True)
+game = Game(movement=True, width=500, height=500, title="Hello, test", resizable=True)
 
-tdge.display.draw_cube(game, size=(1, 1, 1), coords=(1, 1, 1), color=(0, 0, 255))
-tdge.start_game(game)
+cube = Cube([100, 100, 100], color=[255, 255, 255], coords=[100, 100, 100])
+
+display.draw(game, cube)
+
+start_game(game)
