@@ -1,4 +1,3 @@
-from pygame import color
 from tdge import *
 
 game = Game(movement=True, width=500, height=500, title="Hello, test", resizable=True)
