@@ -115,8 +115,13 @@ class display(object):
 		if type(image_path) != str:
 			raise TypeError("The image_path argument should be of type str.")
 
+		game.background_type = background_type
+		game.color = color
+		game.image_path = image_path
+
 		# if the type of the background is a color: fill the background with this color
 		if background_type == "color":
+
 
 			# warning user if he has passed the image_path argument
 			if image_path != "":
@@ -149,9 +154,10 @@ class display(object):
 
 		# checking the type of the given object
 		if type(object) == Cube:
+			game.win.fill(game.color)
+			if game.image_path: game.win.blit(pygame.image.load(game.image_path), (0, 0))
 			# drawing a 2D rectangle
 			pygame.draw.rect(game.win, object.color, ((object.position[0], object.position[1]), (object.size[0], object.size[1])))
-
 			if object not in game.objects: game.objects.append(object)
 		else:
 			raise TypeError("You should provide the object of supported types by this library.")
@@ -232,7 +238,7 @@ def start_game(game, pygame_code=None):
 			if keys[pygame.K_d]:
 				game.position = (game.position[0] + game.velocity, game.position[1], game.position[2])
 
-			# updating the image that user sees (does not work yet)
+			# updating the image that user sees
 			update(game)
 
 		# increasing FPS because the while loop ended and will start again
@@ -249,6 +255,7 @@ def start_game(game, pygame_code=None):
 # function that handles the update of the location of all objects
 def update(game):
 	
+	# getting the offset on Z axis
 	z_offset = game.position[2]
 
 	# updating every object in game
@@ -257,12 +264,12 @@ def update(game):
 		if object.size[2] + z_offset >= 0:
 			# changing the size of the object
 			object.size = [i + z_offset for i in object.size]
-		# changing the position of the object
-		object.position = [object.position[0] - z_offset / 2, object.position[1] - z_offset / 2, object.position[2]]
-		# drawing the object on the screen
-		display.draw(game, object)
-		# setting the position of the player to [0, 0, 0]
-		game.position = [0, 0, 0]
+			# changing the position of the object
+			object.position = [object.position[0] - z_offset / 2, object.position[1] - z_offset / 2, object.position[2]]
+			# drawing the object on the screen
+			display.draw(game, object)
+	# setting the position of the player to [0, 0, 0]
+	game.position = [0, 0, 0]
 
 # class for creating Cube objects
 class Cube(object):
