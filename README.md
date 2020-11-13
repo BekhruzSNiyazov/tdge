@@ -12,7 +12,7 @@ You will be able to install this library using **pip** later. This code is still
 import tdge
 
 # creating a game surface
-game = tdge.Game(movement=True, width=8, height=8, title="Hello, test")
+game = tdge.Game(movement=True, width=800, height=800, title="Hello, test")
 # you can disable movement of the player by calling the disable_movement() method
 game.disable_movement()
  # you can enable movement of the player by calling the enable_movement() method
@@ -25,9 +25,11 @@ game.enable_movement()
 # you need to provide image_path argument to the path of image like that:
 tdge.display.set_background(game, background_type="image", image_path="the_path_image", resizable=True)
 # alternatively, you can fill the background with color like that:
-tdge.display.set_background(game, background_type="color", color=(255, 255, 255), resizable=True)
-# you can draw a cube by calling the draw_cube method()
-tdge.display.draw_cube(game, size=(1, 1, 1), coords=(1, 1, 1), color=(0, 0, 255))
+tdge.display.set_background(game, background_type="color", color=[255, 255, 255], resizable=True)
+# you can create a cube using Cube object included in the library
+cube = Cube([100, 100, 100], color=[255, 255, 255], coords=[100, 100, 100])
+# and after creating a cube, you can draw it
+tdge.display.draw(game, cube)
 # to start the game you need to call the start_game() method
 tdge.start_game(game)
 ```
