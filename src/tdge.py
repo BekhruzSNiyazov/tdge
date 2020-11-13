@@ -150,7 +150,7 @@ class display(object):
 		# checking the type of the given object
 		if type(object) == Cube:
 			# drawing a 2D rectangle
-			pygame.draw.rect(game.win, object.color, ((object.coords[0], object.coords[1]), (object.size[0], object.size[1])))
+			pygame.draw.rect(game.win, object.color, ((object.position[0], object.position[1]), (object.size[0], object.size[1])))
 
 			if object not in game.objects: game.objects.append(object)
 
@@ -252,15 +252,21 @@ def start_game(game, pygame_code=None):
 
 # function that handles the update of the location of all objects
 def update(game):
+	
+	z_offset = game.position[2]
+
 	# updating every object in game
 	for object in game.objects:
+		object.size = [i + z_offset for i in object.size]
+		object.position = [object.position[0] - z_offset / 2, object.position[1] - z_offset / 2, object.position[2]]
 		display.draw(game, object)
+		game.position = [0, 0, 0]
 
 # class for creating Cube objects
 class Cube(object):
 
 	# initializing function
-	def __init__(self, size=[1, 1, 1], color=[0, 0, 0], coords=[0, 0, 0]):
+	def __init__(self, size=[1, 1, 1], color=[0, 0, 0], position=[0, 0, 0]):
 
 		# error-checking
 		if type(size) != list:
@@ -273,12 +279,12 @@ class Cube(object):
 			raise ValueError("The length of color should be 3.")
 		for number in color:
 			if number > 255 or number < 0: raise ValueError("Every number in color should be in range 0 and 256 (it should be >= 0 and <= 255).")
-		if type(coords) != list:
-			raise TypeError("Coords should be a list.\nThe first number in the list corresponds to the position on X-axis; the second corresponds to the position on Y-axis and the third corresponds to the position on Z-axis.")
+		if type(position) != list:
+			raise TypeError("Position should be a list.\nThe first number in the list corresponds to the position on X-axis; the second corresponds to the position on Y-axis and the third corresponds to the position on Z-axis.")
 
 		self.size = size
 		self.color = color
-		self.coords = coords
+		self.position = position
 
 # class for creating cutom objects
 class CustomObject:
