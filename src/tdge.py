@@ -81,7 +81,6 @@ class Game(object):
 		self.rotation = rotation
 		self.position = position
 		self.velocity = velocity
-		self.background_type = "color"
 		self.color = [0, 0, 0]
 		self.image_path = ""
 
@@ -154,10 +153,11 @@ class display(object):
 	# this function handles the drawing objects on the display
 	def draw(game, object):
 
+		if game.image_path: game.win.blit(pygame.image.load(game.image_path), (0, 0))
+		else: game.win.fill(game.color)
+
 		# checking the type of the given object
 		if type(object) == Cube:
-			game.win.fill(game.color)
-			if game.image_path: game.win.blit(pygame.image.load(game.image_path), (0, 0))
 			# drawing a 2D rectangle
 			pygame.draw.rect(game.win, object.color, ((object.position[0], object.position[1]), (object.size[0], object.size[1])))
 			if object not in game.objects: game.objects.append(object)
@@ -277,7 +277,7 @@ def update(game):
 class Cube(object):
 
 	# initializing function
-	def __init__(self, size=[100, 100, 100], color=[0, 0, 0], position=[0, 0, 0]):
+	def __init__(self, size=[100, 100, 100], color=[0, 0, 0], position=[0, 0, 0], angle=[0, 0, 0]):
 
 		# error-checking
 		if type(size) != list:
@@ -292,10 +292,15 @@ class Cube(object):
 			if number > 255 or number < 0: raise ValueError("Every number in color should be in range 0 and 256 (it should be >= 0 and <= 255).")
 		if type(position) != list:
 			raise TypeError("Position should be a list.\nThe first number in the list corresponds to the position on X-axis; the second corresponds to the position on Y-axis and the third corresponds to the position on Z-axis.")
-
+		if type(angle) != list:
+			raise TypeError("Angle should be a list.\nThe first number in the list corresponds to the angle on X-axis; the second corresponds to the angle on Y-axis and the third corresponds to the angle on Z-axis.")
+		if len(angle) != 3:
+			raise ValueError("The length of angle should be 3.")
+		
 		self.size = size
 		self.color = color
 		self.position = position
+		self.angle = angle
 
 # class for creating cutom objects
 class CustomObject:
