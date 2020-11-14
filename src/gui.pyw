@@ -1,7 +1,7 @@
 from tkinter import *
 from tkinter import ttk  
 from tkinter.colorchooser import askcolor 
-import tdge as main
+from tdge import *
 from tkinter.ttk import Radiobutton
 from tkinter import filedialog
 
@@ -10,31 +10,34 @@ def new_object():
 	icn.place(x=8, y=20)
 
 	size = Label(tab2, text="Size", font=("Arial Bold", 10))
-	size.place(x=40, y=60)
+	size.place(x=43, y=70)
 
 	aw = Label(tab2, text="a", font=("Arial Bold", 10))
-	aw.place(x=24, y=95)
+	aw.place(x=29, y=110)
 
 	global a
 	a = Entry(tab2, width=3)
-	a.place(x=20, y=80)
+	a.place(x=25, y=95)
 
 	bw = Label(tab2, text="b", font=("Arial Bold", 10))
-	bw.place(x=54, y=95)
+	bw.place(x=59, y=110)
 
 	global b
 	b = Entry(tab2, width=3)
-	b.place(x=50, y=80)
+	b.place(x=55, y=95)
 
 	cw = Label(tab2, text="c", font=("Arial Bold", 10))
-	cw.place(x=84, y=95)
+	cw.place(x=89, y=110)
 
 	global c
 	c = Entry(tab2, width=3)
-	c.place(x=80, y=80)
+	c.place(x=85, y=95)
 
-	nameOC = Entry(tab2, width=15)
-	nameOC.place(x=20, y=40)
+	nameOO = Entry(tab2, width=15)
+	nameOO.place(x=18, y=45)
+
+	typeCUBE = Radiobutton(tab1, text='Color bg', value=1, command=typechuz)  
+	typeCUBE.place(x=20, y=200)
 
 def resizable3():
 	pass
@@ -58,17 +61,17 @@ def clicked():
 	width = wid.get()
 	global game
 	txt = Entry(window, width=10)
-	game = main.Game(resizable=True if resizable3 else False, movement=True, height=int(height), width=int(width), title=(name))
+	game = Game(resizable=True if resizable3 else False, movement=True, height=int(height), width=int(width), title=(name))
 	if true == "image":
-		main.display.set_background(game, background_type="color", color=main.hex_to_rgb(result[1]))
+		display.set_background(game, background_type="color", color=list(hex_to_rgb(result[1])))
 		if new_object:
-			main.display.draw_cube(game, size=int((a, b, c)), coords=(1, 1, 1), color=(0, 0, 255))
+			pass
 		else:
 			pass
 	elif true == "picture":
-		main.display.set_background(game, background_type="image", image_path=file)
+		display.set_background(game, background_type="image", image_path=file)
 		if new_object:
-			main.display.draw_cube(game, size=(1, 1, 1), coords=(1, 1, 1), color=(0, 0, 255))
+			pass
 		else:
 			pass
 
@@ -120,7 +123,7 @@ btn.place(x=210, y=280)
 
 
 btnNC = Button(tab2, text="New Object", command=new_object)
-btnNC.place(x=145, y=195)
+btnNC.place(x=190, y=280)
 
 
 lbl12 = Label(tab1, text="Window size", font=("Arial Bold", 10))
