@@ -171,8 +171,13 @@ class display(object):
 				x0 = x_size / 100 * percent
 				x1 = x_size - x0
 
+				# setting the RGB values
+				color0 = object.color[0] - 150 if object.color[0] >= 150 else 0
+				color1 = object.color[1] - 150 if object.color[1] >= 150 else 0
+				color2 = object.color[2] - 150 if object.color[2] >= 150 else 0
+
 				# drawing two 2D rectangles based on the data above
-				pygame.draw.rect(game.win, (object.color[0]-150, object.color[1]-150, object.color[2]-150), ((object.position[0], object.position[1]), (x0, object.size[1])))
+				pygame.draw.rect(game.win, (color0, color1, color2), ((object.position[0], object.position[1]), (x0, object.size[1])))
 				pygame.draw.rect(game.win, object.color, ((object.position[0]+x0, object.position[1]), (x1, object.size[1])))
 
 			# adding the object if it is not in game.objects
@@ -305,7 +310,7 @@ def rotate(object, axis="y", velocity=0.1):
 		if axis == "x":
 			object.rotation[0] += velocity
 		if axis == "y":
-			if object.rotation[1] + velocity <= 90:
+			if object.rotation[1] + velocity <= 89:
 				object.rotation[1] += velocity
 			else: object.rotation[1] = 0
 		if axis == "z":
