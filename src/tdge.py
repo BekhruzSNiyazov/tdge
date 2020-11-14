@@ -153,13 +153,29 @@ class display(object):
 	# this function handles the drawing objects on the display
 	def draw(game, object):
 
+		# updating the background
 		if game.image_path: game.win.blit(pygame.image.load(game.image_path), (0, 0))
 		else: game.win.fill(game.color)
 
 		# checking the type of the given object
 		if type(object) == Cube:
-			# drawing a 2D rectangle
-			pygame.draw.rect(game.win, object.color, ((object.position[0], object.position[1]), (object.size[0], object.size[1])))
+
+			if object.rotation == [0, 0, 0]:
+				# drawing a 2D rectangle
+				pygame.draw.rect(game.win, object.color, ((object.position[0], object.position[1]), (object.size[0], object.size[1])))
+			else:
+				# getting the sizes on X axis
+				y_rotation = object.rotation[1]
+				percent = 100 / (90 / y_rotation)
+				x_size = object.size[0]
+				x0 = x_size / 100 * percent
+				x1 = x_size - x0
+
+				# drawing two 2D rectangles based on the data above
+				pygame.draw.rect(game.win, (object.color[0]-100, object.color[1]-100, object.color[2]-100), ((object.position[0], object.position[1]), (x0, object.size[1])))
+				pygame.draw.rect(game.win, object.color, ((object.position[0]+x0, object.position[1]), (x1, object.size[1])))
+
+			# adding the object if it is not in game.objects
 			if object not in game.objects: game.objects.append(object)
 		else:
 			raise TypeError("You should provide the object of supported types by this library.")
@@ -177,7 +193,7 @@ def start_game(game, pygame_code=None):
 
 	# checking if user has passed correct arguments
 	if type(game) != Game:
-		raise TypeError("game should be a Game object. To create a Game object you need to import it from this library.")
+		raise TypeError("Game should be a Game object. To create a Game object you need to import it from this library.")
 
 	if pygame_code is not None:
 		# if user have passed the pygame_code argument but it is not a function...
@@ -263,7 +279,7 @@ def update(game):
 	# updating every object in game
 	for object in game.objects:
 		# change the size of the object if it will be >= 0
-		if object.size[2] + z_offset >= 0:
+		if object.size[2] + z_offset >= 0 and object.size[1] + z_offset >= 0 and object.size[0] + z_offset >= 0:
 			# changing the size of the object
 			object.size = [i + z_offset for i in object.size]
 			# changing the position of the object
@@ -273,11 +289,36 @@ def update(game):
 	# setting the position of the player to [0, 0, 0]
 	game.position = [0, 0, 0]
 
+# this function handles the rotation of the given object
+def rotate(object, axis="y", velocity=0.1):
+	# error-checking
+	if type(axis) != str:
+		raise TypeError("Axis should be a string. Axis should be \"x\"or  \"y\" or \"z\".")
+	if axis not in ["x", "y", "z"]:
+		raise ValueError("Axis should be \"x\" or \"y\" or \"z\".")
+	if type(velocity) not in [int, float]:
+		raise TypeError("Velocity should be int or float.")
+
+	# checking the type of the object
+	if type(object) == Cube:
+		# changing the rotation of the object
+		if axis == "x":
+			object.rotation[0] += velocity
+		if axis == "y":
+			if object.rotation[1] + velocity <= 90:
+				object.rotation[1] += velocity
+			else: object.rotation[1] = 0
+		if axis == "z":
+			object.rotation[2] += velocity
+	# if object is not supported by the library: raise an error
+	else:
+		raise TypeError("You should provide the object of supported types by this library.")
+
 # class for creating Cube objects
 class Cube(object):
 
 	# initializing function
-	def __init__(self, size=[100, 100, 100], color=[0, 0, 0], position=[0, 0, 0], angle=[0, 0, 0]):
+	def __init__(self, size=[100, 100, 100], color=[0, 0, 0], position=[0, 0, 0], rotation=[0, 0, 0]):
 
 		# error-checking
 		if type(size) != list:
@@ -292,15 +333,15 @@ class Cube(object):
 			if number > 255 or number < 0: raise ValueError("Every number in color should be in range 0 and 256 (it should be >= 0 and <= 255).")
 		if type(position) != list:
 			raise TypeError("Position should be a list.\nThe first number in the list corresponds to the position on X-axis; the second corresponds to the position on Y-axis and the third corresponds to the position on Z-axis.")
-		if type(angle) != list:
-			raise TypeError("Angle should be a list.\nThe first number in the list corresponds to the angle on X-axis; the second corresponds to the angle on Y-axis and the third corresponds to the angle on Z-axis.")
-		if len(angle) != 3:
-			raise ValueError("The length of angle should be 3.")
+		if type(rotation) != list:
+			raise TypeError("Rotation should be a list.\nThe first number in the list corresponds to the rotation on X-axis; the second corresponds to the rotation on Y-axis and the third corresponds to the rotation on Z-axis.")
+		if len(rotation) != 3:
+			raise ValueError("The length of rotation should be 3.")
 		
 		self.size = size
 		self.color = color
 		self.position = position
-		self.angle = angle
+		self.rotation = rotation
 
 # class for creating cutom objects
 class CustomObject:
