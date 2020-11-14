@@ -172,7 +172,7 @@ class display(object):
 				x1 = x_size - x0
 
 				# drawing two 2D rectangles based on the data above
-				pygame.draw.rect(game.win, (object.color[0]-100, object.color[1]-100, object.color[2]-100), ((object.position[0], object.position[1]), (x0, object.size[1])))
+				pygame.draw.rect(game.win, (object.color[0]-150, object.color[1]-150, object.color[2]-150), ((object.position[0], object.position[1]), (x0, object.size[1])))
 				pygame.draw.rect(game.win, object.color, ((object.position[0]+x0, object.position[1]), (x1, object.size[1])))
 
 			# adding the object if it is not in game.objects
