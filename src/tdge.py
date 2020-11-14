@@ -81,6 +81,9 @@ class Game(object):
 		self.rotation = rotation
 		self.position = position
 		self.velocity = velocity
+		self.background_type = "color"
+		self.color = [0, 0, 0]
+		self.image_path = ""
 
 		# setting the objects variable to []. it should store all objects in the game
 		self.objects = []
@@ -121,7 +124,6 @@ class display(object):
 
 		# if the type of the background is a color: fill the background with this color
 		if background_type == "color":
-
 
 			# warning user if he has passed the image_path argument
 			if image_path != "":
