@@ -129,9 +129,6 @@ class display(object):
 
 			# fill the game window with color
 			game.win.fill(color)
-
-			# update the screen so that user will see the difference
-			pygame.display.update()
 		
 		# if the type of the background is an image: set the given image as a background
 		elif background_type == "image":
@@ -148,6 +145,9 @@ class display(object):
 
 			# displaying the image on a screen
 			game.win.blit(pygame.image.load(image_path), (0, 0))
+
+		# update the screen so that user will see the difference
+		pygame.display.update()
 
 	# this function handles the drawing objects on the display
 	def draw(game, object):
