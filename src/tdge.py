@@ -172,11 +172,12 @@ class display(object):
 				x_size = object.size[0]
 				x0 = x_size / 100 * percent
 				x1 = x_size - x0
+				number = 255 - (255 / 100 * percent)
 
 				# setting the RGB values
-				color0 = object.color[0] - 150 if object.color[0] >= 150 else 0
-				color1 = object.color[1] - 150 if object.color[1] >= 150 else 0
-				color2 = object.color[2] - 150 if object.color[2] >= 150 else 0
+				color0 = object.color[0] - number if object.color[0] >= number else 0
+				color1 = object.color[1] - number if object.color[1] >= number else 0
+				color2 = object.color[2] - number if object.color[2] >= number else 0
 
 				# drawing two 2D rectangles based on the data above
 				pygame.draw.rect(game.win, (color0, color1, color2), ((object.position[0], object.position[1]), (x0, object.size[1])))
