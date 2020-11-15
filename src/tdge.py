@@ -219,57 +219,103 @@ def start_game(game, code=None):
 	# I want the while loop to end first, and then to end the game
 	running = True
 
-	while running:
+	if callable(code):
+		while running:
 
-		# printing FPS every second
-		# getting the current time
-		now = datetime.now().second
-		# checking, if one second is over
-		if now - start >= 1:
-			# printing FPS
-			print(frame_count)
-			# resetting the timer
-			start = datetime.now().second
-			# resetting the FPS
-			frame_count = 0
+			# printing FPS every second
+			# getting the current time
+			now = datetime.now().second
+			# checking, if one second is over
+			if now - start >= 1:
+				# printing FPS
+				print(frame_count)
+				# resetting the timer
+				start = datetime.now().second
+				# resetting the FPS
+				frame_count = 0
 
-		# if clicked the "x" button: quit the game
-		if pygame.event.get(pygame.QUIT): running = False
+			# if clicked the "x" button: quit the game
+			if pygame.event.get(pygame.QUIT): running = False
 
-		# getting all the key presses from the user
-		keys = pygame.key.get_pressed()
+			# getting all the key presses from the user
+			keys = pygame.key.get_pressed()
 
-		# if the user pressed "escape": quit the game
-		if keys[pygame.K_ESCAPE]: running = False
+			# if the user pressed "escape": quit the game
+			if keys[pygame.K_ESCAPE]: running = False
 
-		# if the movement is enabled: move the user when he presses WASD keys and rotate if he is moving his mouse
-		if game.movement:
-			
-			# if user presses WASD keys: update the position of the player
+			# if the movement is enabled: move the user when he presses WASD keys and rotate if he is moving his mouse
+			if game.movement:
+				
+				# if user presses WASD keys: update the position of the player
 
-			# if the user pressed "w"
-			if keys[pygame.K_w]:
-				game.position = (game.position[0], game.position[1], game.position[2] + game.velocity)
-			# if the user pressed "s"
-			if keys[pygame.K_s]:
-				game.position = (game.position[0], game.position[1], game.position[2] - game.velocity)
-			# if the user pressed "a"
-			if keys[pygame.K_a]:
-				game.position = (game.position[0] - game.velocity, game.position[1], game.position[2])
-			# if the user pressed "d"
-			if keys[pygame.K_d]:
-				game.position = (game.position[0] + game.velocity, game.position[1], game.position[2])
+				# if the user pressed "w"
+				if keys[pygame.K_w]:
+					game.position = (game.position[0], game.position[1], game.position[2] + game.velocity)
+				# if the user pressed "s"
+				if keys[pygame.K_s]:
+					game.position = (game.position[0], game.position[1], game.position[2] - game.velocity)
+				# if the user pressed "a"
+				if keys[pygame.K_a]:
+					game.position = (game.position[0] - game.velocity, game.position[1], game.position[2])
+				# if the user pressed "d"
+				if keys[pygame.K_d]:
+					game.position = (game.position[0] + game.velocity, game.position[1], game.position[2])
 
-			# updating the image that user is seeing
-			update(game)
+				# updating the image that user is seeing
+				update(game)
 
-		# increasing FPS because the while loop ended and will start again
-		frame_count += 1
+			# increasing FPS because the while loop ended and will start again
+			frame_count += 1
 
-		# if user have added pygame_code as a function...
-		if callable(code):
-			# ...call it
+			# calling the function that user passed in
 			code()
+	else:
+		while running:
+
+			# printing FPS every second
+			# getting the current time
+			now = datetime.now().second
+			# checking, if one second is over
+			if now - start >= 1:
+				# printing FPS
+				print(frame_count)
+				# resetting the timer
+				start = datetime.now().second
+				# resetting the FPS
+				frame_count = 0
+
+			# if clicked the "x" button: quit the game
+			if pygame.event.get(pygame.QUIT): running = False
+
+			# getting all the key presses from the user
+			keys = pygame.key.get_pressed()
+
+			# if the user pressed "escape": quit the game
+			if keys[pygame.K_ESCAPE]: running = False
+
+			# if the movement is enabled: move the user when he presses WASD keys and rotate if he is moving his mouse
+			if game.movement:
+				
+				# if user presses WASD keys: update the position of the player
+
+				# if the user pressed "w"
+				if keys[pygame.K_w]:
+					game.position = (game.position[0], game.position[1], game.position[2] + game.velocity)
+				# if the user pressed "s"
+				if keys[pygame.K_s]:
+					game.position = (game.position[0], game.position[1], game.position[2] - game.velocity)
+				# if the user pressed "a"
+				if keys[pygame.K_a]:
+					game.position = (game.position[0] - game.velocity, game.position[1], game.position[2])
+				# if the user pressed "d"
+				if keys[pygame.K_d]:
+					game.position = (game.position[0] + game.velocity, game.position[1], game.position[2])
+
+				# updating the image that user is seeing
+				update(game)
+
+			# increasing FPS because the while loop ended and will start again
+			frame_count += 1
 
 	# exit the game when it is closed
 	pygame.quit()
