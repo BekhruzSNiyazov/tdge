@@ -74,7 +74,7 @@ class Game(object):
 			# creating the game window, that cannot resize
 			self.win = pygame.display.set_mode((width, height))
 
-		# making the width, height, movement, rotation, position and velocity global variables
+		# making the width, height, movement, rotation, position, velocity and update global variables
 		self.width = width
 		self.height = height
 		self.movement = movement
@@ -83,6 +83,7 @@ class Game(object):
 		self.velocity = velocity
 		self.color = [0, 0, 0]
 		self.image_path = ""
+		self.update = False
 
 		# setting the objects variable to []. it should store all objects in the game
 		self.objects = []
@@ -155,9 +156,10 @@ class display(object):
 	# this function handles the drawing objects on the display
 	def draw(game, object):
 
-		# updating the background
-		if game.image_path: game.win.blit(game.image, (0, 0))
-		else: game.win.fill(game.color)
+		# updating the background if game.update is True
+		if game.update:
+			if game.image_path: game.win.blit(game.image, (0, 0))
+			else: game.win.fill(game.color)
 
 		# checking the type of the given object
 		if type(object) == Cube:
@@ -185,10 +187,9 @@ class display(object):
 
 			# adding the object if it is not in game.objects
 			if object not in game.objects:
-				print("adding a new object")
 				game.objects.append(object)
 		else:
-			raise TypeError("You should provide the object of supported types by this library.")
+			raise TypeError("You should provide the object of supported type by this library.")
 
 		# update the screen so that user will see the difference
 		pygame.display.update()
@@ -246,6 +247,9 @@ def start_game(game, code=None):
 			# if the user pressed "escape": quit the game
 			if keys[pygame.K_ESCAPE]: running = False
 
+			# when game.update is False the background will not be updated
+			game.update = False
+
 			# if the movement is enabled: move the user when he presses WASD keys and rotate if he is moving his mouse
 			if game.movement:
 				
@@ -254,15 +258,19 @@ def start_game(game, code=None):
 				# if the user pressed "w"
 				if keys[pygame.K_w]:
 					game.position = (game.position[0], game.position[1], game.position[2] + game.velocity)
+					game.update = True
 				# if the user pressed "s"
 				if keys[pygame.K_s]:
 					game.position = (game.position[0], game.position[1], game.position[2] - game.velocity)
+					game.update = True
 				# if the user pressed "a"
 				if keys[pygame.K_a]:
 					game.position = (game.position[0] - game.velocity, game.position[1], game.position[2])
+					game.update = True
 				# if the user pressed "d"
 				if keys[pygame.K_d]:
 					game.position = (game.position[0] + game.velocity, game.position[1], game.position[2])
+					game.update = True
 
 				# updating the image that user is seeing
 				update(game)
@@ -296,6 +304,9 @@ def start_game(game, code=None):
 			# if the user pressed "escape": quit the game
 			if keys[pygame.K_ESCAPE]: running = False
 
+			# when game.update is False the background will not be updated
+			game.update = False
+
 			# if the movement is enabled: move the user when he presses WASD keys and rotate if he is moving his mouse
 			if game.movement:
 				
@@ -304,15 +315,19 @@ def start_game(game, code=None):
 				# if the user pressed "w"
 				if keys[pygame.K_w]:
 					game.position = (game.position[0], game.position[1], game.position[2] + game.velocity)
+					game.update = True
 				# if the user pressed "s"
 				if keys[pygame.K_s]:
 					game.position = (game.position[0], game.position[1], game.position[2] - game.velocity)
+					game.update = True
 				# if the user pressed "a"
 				if keys[pygame.K_a]:
 					game.position = (game.position[0] - game.velocity, game.position[1], game.position[2])
+					game.update = True
 				# if the user pressed "d"
 				if keys[pygame.K_d]:
 					game.position = (game.position[0] + game.velocity, game.position[1], game.position[2])
+					game.update = True
 
 				# updating the image that user is seeing
 				update(game)
