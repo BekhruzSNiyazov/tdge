@@ -144,8 +144,10 @@ class display(object):
 			except:
 				raise FileNotFoundError("The given image path is incorrect.")
 
+			game.image = pygame.image.load(image_path)
+
 			# displaying the image on a screen
-			game.win.blit(pygame.image.load(image_path), (0, 0))
+			game.win.blit(game.image, (0, 0))
 
 		# update the screen so that user will see the difference
 		pygame.display.update()
@@ -154,7 +156,7 @@ class display(object):
 	def draw(game, object):
 
 		# updating the background
-		if game.image_path: game.win.blit(pygame.image.load(game.image_path), (0, 0))
+		if game.image_path: game.win.blit(game.image, (0, 0))
 		else: game.win.fill(game.color)
 
 		# checking the type of the given object
@@ -189,7 +191,7 @@ class display(object):
 		pygame.display.update()
 
 # function, that runs the game
-def start_game(game, pygame_code=None):
+def start_game(game, code=None):
 
 	# giving the user instructions on how to close the game
 	print("To exit the game press ESC.")
@@ -200,25 +202,21 @@ def start_game(game, pygame_code=None):
 	if type(game) != Game:
 		raise TypeError("Game should be a Game object. To create a Game object you need to import it from this library.")
 
-	if pygame_code is not None:
+	if code is not None:
 		# if user have passed the pygame_code argument but it is not a function...
-		if not callable(pygame_code):
+		if not callable(code):
 			# ...raise an error
 			raise TypeError("The pygame_code argument should be a function. Make sure you have not added \"(\" and \")\" (brackets).")
-		# if user have given the function with pygame code...
-		else:
-			# ...call this function
-			pygame_code()
 
 	# preparing to count FPS
 	start = datetime.now().second
 
+	# starting couting frames from 0
+	frame_count = 0
+
 	# I use bools instead of just breaking, because 
 	# I want the while loop to end first, and then to end the game
 	running = True
-
-	# starting couting frames from 0
-	frame_count = 0
 
 	while running:
 
@@ -261,16 +259,16 @@ def start_game(game, pygame_code=None):
 			if keys[pygame.K_d]:
 				game.position = (game.position[0] + game.velocity, game.position[1], game.position[2])
 
-			# updating the image that user sees
+			# updating the image that user is seeing
 			update(game)
 
 		# increasing FPS because the while loop ended and will start again
 		frame_count += 1
 
 		# if user have added pygame_code as a function...
-		if callable(pygame_code):
+		if callable(code):
 			# ...call it
-			pygame_code()
+			code()
 
 	# exit the game when it is closed
 	pygame.quit()
@@ -281,18 +279,21 @@ def update(game):
 	# getting the offset on Z axis
 	z_offset = game.position[2]
 
-	# updating every object in game
-	for object in game.objects:
-		# change the size of the object if it will be >= 0
-		if object.size[2] + z_offset >= 0 and object.size[1] + z_offset >= 0 and object.size[0] + z_offset >= 0:
-			# changing the size of the object
-			object.size = [i + z_offset for i in object.size]
-			# changing the position of the object
-			object.position = [object.position[0] - z_offset / 2, object.position[1] - z_offset / 2, object.position[2]]
-			# drawing the object on the screen
-			display.draw(game, object)
-	# setting the position of the player to [0, 0, 0]
-	game.position = [0, 0, 0]
+	if z_offset:
+		# updating every object in game
+		for object in game.objects:
+			# change the size of the object if it will be >= 0
+			if object.size[2] + z_offset >= 0 and object.size[1] + z_offset >= 0 and object.size[0] + z_offset >= 0:
+				# changing the size of the object
+				object.size = [i + z_offset for i in object.size]
+				# changing the position of the object
+				object.position = [object.position[0] - z_offset / 2, object.position[1] - z_offset / 2, object.position[2]]
+				# drawing the object on the screen
+				display.draw(game, object)
+		# setting the position of the player to [0, 0, 0]
+		game.position = [0, 0, 0]
+	else:
+		for object in game.objects: display.draw(game, object)
 
 # this function handles the rotation of the given object
 def rotate(object, axis="y", velocity=0.1):
