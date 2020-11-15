@@ -184,7 +184,9 @@ class display(object):
 				pygame.draw.rect(game.win, object.color, ((object.position[0]+x0, object.position[1]), (x1, object.size[1])))
 
 			# adding the object if it is not in game.objects
-			if object not in game.objects: game.objects.append(object)
+			if object not in game.objects:
+				print("adding a new object")
+				game.objects.append(object)
 		else:
 			raise TypeError("You should provide the object of supported types by this library.")
 
@@ -220,6 +222,7 @@ def start_game(game, code=None):
 	running = True
 
 	if callable(code):
+		# I am repeating this code twice to increase efficiency
 		while running:
 
 			# printing FPS every second
