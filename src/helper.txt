@@ -1,0 +1,30 @@
+If the Z position of the camera <= (Z position of the cube - (Z size of the cube)):
+
+	if the X position of the camera = X position of the cube:
+
+		if Y position of the camera = Y position of the cube:
+	
+			if the rotation of the camera == [0, 0, 0] => you can only see the front side of the cube
+		
+			if the Y and Z rotation of the camera = [0, 0]:
+
+				if the X rotation of the camera is < 75 => you can see the front side of the cube
+
+				if the X rotation of the camera is > -75 => you can see the front side of the cube
+
+		if the Y position of the camera < -(Y size of the cube / 2):
+			
+			if the X, Y and Z rotation of the camera == [0, 0, 0]:
+				
+				if Y position of the camera ... :
+
+					you can only see the bottom side of the cube
+
+
+
+// TODO
+Calculate the formula. Don't have enough time to do that.
+
+size     | 1     | 2     | 3     | 4     | 5     | 6     | 7     | 8     | 9     | 10
+----------------------------------------------------------------------------------------
+position | -0.79 | -1.58 | -2.37 | -3.16 | -3.95 | -4.73 | -5.52 | -6.31 | -7.10 | -7.89
