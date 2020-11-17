@@ -4,22 +4,22 @@ If the Z position of the camera <= (Z position of the cube - (Z size of the cube
 
 		if Y position of the camera = Y position of the cube:
 	
-			if the rotation of the camera == [0, 0, 0] => you can only see the front side of the cube
+			if the rotation of the camera == [0, 0, 0]:
+			
+				you can only see the front side of the cube
 		
+				if Y position of the camera = (Y size of the cube * -0.79) => you can only see the bottom side of the cube
+
+				else if Y position of the camera = (Y size of the cube * 0.79) => you can only see the top side of the cube
+
+				else:
+
+					if Y position of the camera = -((Y size of the cube - 1) * 0.58 + 0.79) => you can only see the bottom side of the cube
+
+					else if Y position of the camera = ((Y side of the cube - 1) * 0.58 + 0.79) => you can only see the top side of the cube
+
 			if the Y and Z rotation of the camera = [0, 0]:
 
 				if the X rotation of the camera is < 75 => you can see the front side of the cube
 
 				if the X rotation of the camera is > -75 => you can see the front side of the cube
-
-		if the Y position of the camera < -(Y size of the cube / 2):
-			
-			if the X, Y and Z rotation of the camera == [0, 0, 0]:
-				
-				if Y position of the camera = Y size of the cube * -0.79:
-
-					you can only see the bottom side of the cube
-
-				if the Y position of the camera = Y size of the cube * 0.79:
-
-					you can only see the upper side of the cube
