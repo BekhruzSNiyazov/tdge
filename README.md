@@ -33,14 +33,13 @@ tdge.display.draw(game, cube)
 # to start the game you need to call the start_game() method
 tdge.start_game(game)
 ```
-If you want to add some code developed using pygame you can do that easily.
-Just put all pygame code in a function and when you call the start_game() method you need to pass that function as a argument to pygame_code. Here is an example:
+To add code that will repeat every frame you need to define a function and with the code and then pass it as an argument to start_game
 ```python
-def code_in_pygame():
+def code():
     pygame.draw.rect(game.win, (0, 0, 0), (100, 100, 10, 10)) # replace "game" with whatever you assigned the Game object to
     pygame.display.update()
     
-tdge.start_game(game, pygame_code=code_in_pygame) # you don't need need brackets after passing code_in_pygame function as an argument to pygame_code
+tdge.start_game(game, code=code) # you don't need need brackets after passing code function as an argument to pygame_code
 ```
 
 ## Full documentation
