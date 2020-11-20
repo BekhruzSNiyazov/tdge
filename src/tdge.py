@@ -22,7 +22,7 @@ from datetime import datetime
 class Game(object):
 
 	# initializing function
-	def __init__(self, movement=False, width=10, height=10, title="My Game", icon_path="", rotation=[0, 0, 0], position=[0, 0, 0], resizable=False, velocity=1):
+	def __init__(self, movement=False, width=10, height=10, title="My Game", icon_path="", rotation=[0, 0, 0], position=[0, 0, 0], resizable=False, fullscreen=False, velocity=1):
 		
 		# checking if the user passed correct arguments; if not: raise an error
 		if type(movement) != bool:
@@ -44,7 +44,10 @@ class Game(object):
 			raise TypeError("Rotation should be a list.\nThe first number in the list corresponds to rotation in X direction; the second corresponds to rotation direction in Y direction and the third corresponds to rotation in Z direction.")
 
 		if type(resizable) != bool:
-			raise TypeError("resizable should be a bool. If resizable is set to true the user will be able to resize the window.")
+			raise TypeError("Resizable should be a bool. If resizable is set to true the user will be able to resize the window.")
+
+		if type(fullscreen) != bool:
+			raise TypeError("Fullscreen should be a bool.")
 
 		if type(position) != list:
 			raise TypeError("Position should be a list.\nThe first number in the list corresponds to position of the player on X axis; the second corresponds to the position on Y axis and the third corresponds to the position on Z axis.")
@@ -69,7 +72,12 @@ class Game(object):
 			# creating the game window that can resize
 			self.win = pygame.display.set_mode((width, height), pygame.RESIZABLE)
 
-		# if resizable is false
+		# if fullscreen is true and resizable is not true
+		elif fullscreen:
+			# creating a fullscreen window
+			self.win = pygame.display.set_mode((width, height), pygame.FULLSCREEN)
+
+		# if resizable is false and fullscreen is false
 		else:
 			# creating the game window, that cannot resize
 			self.win = pygame.display.set_mode((width, height))
@@ -118,8 +126,11 @@ class display(object):
 		if type(image_path) != str:
 			raise TypeError("The image_path argument should be of type str.")
 
+		# setting the background_type of the game to the given background_type
 		game.background_type = background_type
+		# setting the color of the background of the game to the gived color
 		game.color = color
+		# setting the path of the background image of the game to the given image path
 		game.image_path = image_path
 
 		# if the type of the background is a color: fill the background with this color
@@ -164,26 +175,46 @@ class display(object):
 		# checking the type of the given object
 		if type(object) == Cube:
 
-			if object.rotation == [0, 0, 0]:
-				# drawing a 2D rectangle
-				pygame.draw.rect(game.win, object.color, ((object.position[0], object.position[1]), (object.size[0], object.size[1])))
-			else:
-				# getting the sizes on X axis
-				y_rotation = object.rotation[1]
-				percent = 100 / (90 / y_rotation)
-				x_size = object.size[0]
-				x0 = x_size / 100 * percent
-				x1 = x_size - x0
-				number = 255 - (255 / 100 * percent)
+			# getting the height of the game window
+			height = game.win.get_height()
+			# getting the width of the game window
+			width = game.win.get_width()
+			# creating a position list, storing the position of an object on a 3D coordinate plane
+			position = [width / 2 - object.position[0] - object.size[0] / 2, height / 2 - object.position[1] - object.size[1] / 2, object.position[2]]
 
-				# setting the RGB values
-				color0 = object.color[0] - number if object.color[0] >= number else 0
-				color1 = object.color[1] - number if object.color[1] >= number else 0
-				color2 = object.color[2] - number if object.color[2] >= number else 0
+			# if player is not "inside" of the object
+			if game.position[0] > position[0] + object.size[0] / 2 or \
+				game.position[0] < position[0] - object.size[0] / 2 and \
+					game.position[1] > position[1] + object.size[1] / 2 or \
+						game.position[1] < position[1] - object.size[1] / 2 and \
+							game.position[2] > position[2] + object.size[2] / 2 or \
+								game.position[2] < position[2] - object.size[2] / 2:
+				# if the rotation of the player is [0, 0, 0]
+				if game.rotation == [0, 0, 0]:
+					# if the rotation of the object is [0, 0, 0]
+					if object.rotation == [0, 0, 0]:
+						# drawing a 2D rectangle
+						pygame.draw.rect(game.win, object.color, ((position[0], position[1]), (object.size[0], object.size[1])))
+					# if rotation of the object is not [0, 0, 0]
+					else:
+						# if the object is rotated on Y axis
+						if object.rotation[1] != 0:
+							# getting the sizes on X axis
+							y_rotation = object.rotation[1]
+							percent = 100 / (90 / y_rotation)
+							x_size = object.size[0]
+							x0 = x_size / 100 * percent
+							x1 = x_size - x0
+							number = 255 - (255 / 100 * percent)
 
-				# drawing two 2D rectangles based on the data above
-				pygame.draw.rect(game.win, (color0, color1, color2), ((object.position[0], object.position[1]), (x0, object.size[1])))
-				pygame.draw.rect(game.win, object.color, ((object.position[0]+x0, object.position[1]), (x1, object.size[1])))
+							# setting the RGB values
+							color0 = object.color[0] - number if object.color[0] >= number else 0
+							color1 = object.color[1] - number if object.color[1] >= number else 0
+							color2 = object.color[2] - number if object.color[2] >= number else 0
+
+							# drawing two 2D rectangles based on the data above
+							pygame.draw.rect(game.win, (color0, color1, color2), ((position[0], position[1]), (x0, object.size[1])))
+							pygame.draw.rect(game.win, object.color, ((position[0]+x0, position[1]), (x1, object.size[1])))
 
 			# adding the object if it is not in game.objects
 			if object not in game.objects:
@@ -218,147 +249,74 @@ def start_game(game, code=None):
 	# starting couting frames from 0
 	frame_count = 0
 
-	# I use bools instead of just breaking, because 
+	# creating a pygame clock
+	clock = pygame.time.Clock()
+
+	# I use bools instead of just breaking, because
 	# I want the while loop to end first, and then to end the game
 	running = True
 
-	if callable(code):
-		# I am repeating this code twice to increase efficiency
-		while running:
+	while running:
 
-			# printing FPS every second
-			# getting the current time
-			now = datetime.now().second
-			# checking, if one second is over
-			if now - start >= 1:
-				# printing FPS
-				print(frame_count)
-				# resetting the timer
-				start = datetime.now().second
-				# resetting the FPS
-				frame_count = 0
+		# printing FPS every second
+		# getting the current time
+		now = datetime.now().second
+		# checking, if one second is over
+		if now - start >= 1:
+			# printing FPS
+			print(frame_count)
+			# resetting the timer
+			start = datetime.now().second
+			# resetting the FPS
+			frame_count = 0
 
-			# if clicked the "x" button: quit the game
-			if pygame.event.get(pygame.QUIT): running = False
+		# if clicked the "x" button: quit the game
+		if pygame.event.get(pygame.QUIT): running = False
 
-			# getting all the key presses from the user
-			keys = pygame.key.get_pressed()
+		# getting all the key presses from the user
+		keys = pygame.key.get_pressed()
 
-			# if the user pressed "escape": quit the game
-			if keys[pygame.K_ESCAPE]: running = False
+		# if the user pressed "escape": quit the game
+		if keys[pygame.K_ESCAPE]: running = False
 
-			# when game.update is False the background will not be updated
-			game.update = False
+		# when game.update is False the background will not be updated
+		game.update = False
 
-			# if the movement is enabled: move the user when he presses WASD keys and rotate if he is moving his mouse
-			if game.movement:
-				
-				# if user presses WASD keys: update the position of the player
+		# if the movement is enabled: move the user when he presses WASD keys and rotate if he is moving his mouse
+		if game.movement:
+			
+			# if user presses WASD keys: update the position of the player
 
-				# if the user pressed "w"
-				if keys[pygame.K_w]:
-					game.position = (game.position[0], game.position[1], game.position[2] + game.velocity)
-					game.update = True
-				# if the user pressed "s"
-				if keys[pygame.K_s]:
-					game.position = (game.position[0], game.position[1], game.position[2] - game.velocity)
-					game.update = True
-				# if the user pressed "a"
-				if keys[pygame.K_a]:
-					game.position = (game.position[0] - game.velocity, game.position[1], game.position[2])
-					game.update = True
-				# if the user pressed "d"
-				if keys[pygame.K_d]:
-					game.position = (game.position[0] + game.velocity, game.position[1], game.position[2])
-					game.update = True
+			# if the user pressed "w"
+			if keys[pygame.K_w]:
+				game.position = (game.position[0], game.position[1], game.position[2] + game.velocity)
+				game.update = True
+			# if the user pressed "s"
+			if keys[pygame.K_s]:
+				game.position = (game.position[0], game.position[1], game.position[2] - game.velocity)
+				game.update = True
+			# if the user pressed "a"
+			if keys[pygame.K_a]:
+				game.position = (game.position[0] - game.velocity, game.position[1], game.position[2])
+				game.update = True
+			# if the user pressed "d"
+			if keys[pygame.K_d]:
+				game.position = (game.position[0] + game.velocity, game.position[1], game.position[2])
+				game.update = True
 
-				# updating the image that user is seeing
-				update(game)
+		for object in game.objects:
+			display.draw(game, object)
 
-			# increasing FPS because the while loop ended and will start again
-			frame_count += 1
+		# increasing FPS because the while loop ended and will start again
+		frame_count += 1
 
-			# calling the function that user passed in
+		if callable(code):
 			code()
-	else:
-		while running:
 
-			# printing FPS every second
-			# getting the current time
-			now = datetime.now().second
-			# checking, if one second is over
-			if now - start >= 1:
-				# printing FPS
-				print(frame_count)
-				# resetting the timer
-				start = datetime.now().second
-				# resetting the FPS
-				frame_count = 0
-
-			# if clicked the "x" button: quit the game
-			if pygame.event.get(pygame.QUIT): running = False
-
-			# getting all the key presses from the user
-			keys = pygame.key.get_pressed()
-
-			# if the user pressed "escape": quit the game
-			if keys[pygame.K_ESCAPE]: running = False
-
-			# when game.update is False the background will not be updated
-			game.update = False
-
-			# if the movement is enabled: move the user when he presses WASD keys and rotate if he is moving his mouse
-			if game.movement:
-				
-				# if user presses WASD keys: update the position of the player
-
-				# if the user pressed "w"
-				if keys[pygame.K_w]:
-					game.position = (game.position[0], game.position[1], game.position[2] + game.velocity)
-					game.update = True
-				# if the user pressed "s"
-				if keys[pygame.K_s]:
-					game.position = (game.position[0], game.position[1], game.position[2] - game.velocity)
-					game.update = True
-				# if the user pressed "a"
-				if keys[pygame.K_a]:
-					game.position = (game.position[0] - game.velocity, game.position[1], game.position[2])
-					game.update = True
-				# if the user pressed "d"
-				if keys[pygame.K_d]:
-					game.position = (game.position[0] + game.velocity, game.position[1], game.position[2])
-					game.update = True
-
-				# updating the image that user is seeing
-				update(game)
-
-			# increasing FPS because the while loop ended and will start again
-			frame_count += 1
+		clock.tick(120)
 
 	# exit the game when it is closed
 	pygame.quit()
-
-# function that handles the update of the location of all objects
-def update(game):
-	
-	# getting the offset on Z axis
-	z_offset = game.position[2]
-
-	if z_offset:
-		# updating every object in game
-		for object in game.objects:
-			# change the size of the object if it will be >= 0
-			if object.size[2] + z_offset >= 0 and object.size[1] + z_offset >= 0 and object.size[0] + z_offset >= 0:
-				# changing the size of the object
-				object.size = [i + z_offset for i in object.size]
-				# changing the position of the object
-				object.position = [object.position[0] - z_offset / 2, object.position[1] - z_offset / 2, object.position[2]]
-				# drawing the object on the screen
-				display.draw(game, object)
-		# setting the position of the player to [0, 0, 0]
-		game.position = [0, 0, 0]
-	else:
-		for object in game.objects: display.draw(game, object)
 
 # this function handles the rotation of the given object
 def rotate(object, axis="y", velocity=0.1):
@@ -389,9 +347,11 @@ def rotate(object, axis="y", velocity=0.1):
 class Cube(object):
 
 	# initializing function
-	def __init__(self, size=[100, 100, 100], color=[0, 0, 0], position=[0, 0, 0], rotation=[0, 0, 0]):
+	def __init__(self, name="New Cube", size=[100, 100, 100], color=[0, 0, 0], position=[0, 0, 0], rotation=[0, 0, 0]):
 
 		# error-checking
+		if type(name) != str:
+			raise TypeError("The name of the cube should be a string.")
 		if type(size) != list:
 			raise TypeError("Size should be a list.\nThe first number in the list corresponds to size on X-axis; the second corresponds to size on Y-axis and the third corresponds to size on Z-axis.")
 		if len(size) != 3:
@@ -413,6 +373,7 @@ class Cube(object):
 		self.color = color
 		self.position = position
 		self.rotation = rotation
+		self.name = name
 
 # class for creating cutom objects
 class CustomObject:
