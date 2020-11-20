@@ -27,7 +27,7 @@ tdge.display.set_background(game, background_type="image", image_path="the_path_
 # alternatively, you can fill the background with color like that:
 tdge.display.set_background(game, background_type="color", color=[255, 255, 255], resizable=True)
 # you can create a cube using Cube object included in the library
-cube = Cube([100, 100, 100], color=[255, 255, 255], coords=[100, 100, 100])
+cube = Cube([100, 100, 100], color=[255, 255, 255], coords=[0, 0, 100])
 # and after creating a cube, you can draw it
 tdge.display.draw(game, cube)
 # to start the game you need to call the start_game() method
