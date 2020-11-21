@@ -216,8 +216,6 @@ class display(object):
 							x1 = x_size - x0
 							number = 255 - (255 / 100 * percent)
 
-							print(game.position)
-
 							# setting the RGB values
 							color0 = object.color[0] - number if object.color[0] >= number else 0
 							color1 = object.color[1] - number if object.color[1] >= number else 0
