@@ -179,8 +179,16 @@ class display(object):
 			height = game.win.get_height()
 			# getting the width of the game window
 			width = game.win.get_width()
+			# getting the distance between the cube and the user
+			distance = game.position[2] - object.position[2]
+			# setting the size of the object that user will actually see
+			display_size = []
+			for size in object.size:
+				if game.position[2] < object.position[2]:
+					display_size.append(size / distance * 1000)
+				else: display_size.append(0)
 			# creating a position list, storing the position of an object on a 3D coordinate plane
-			position = [width / 2 - object.position[0] - object.size[0] / 2, height / 2 - object.position[1] - object.size[1] / 2, object.position[2]]
+			position = [width / 2 - object.position[0] - display_size[0] / 2, height / 2 - object.position[1] - display_size[1] / 2, object.position[2]]
 
 			# if player is not "inside" of the object
 			if game.position[0] > position[0] + object.size[0] / 2 or \
@@ -189,12 +197,13 @@ class display(object):
 						game.position[1] < position[1] - object.size[1] / 2 and \
 							game.position[2] > position[2] + object.size[2] / 2 or \
 								game.position[2] < position[2] - object.size[2] / 2:
+
 				# if the rotation of the player is [0, 0, 0]
 				if game.rotation == [0, 0, 0]:
 					# if the rotation of the object is [0, 0, 0]
 					if object.rotation == [0, 0, 0]:
 						# drawing a 2D rectangle
-						pygame.draw.rect(game.win, object.color, ((position[0], position[1]), (object.size[0], object.size[1])))
+						pygame.draw.rect(game.win, object.color, ((position[0], position[1]), (display_size[0], display_size[1])))
 					# if rotation of the object is not [0, 0, 0]
 					else:
 						# if the object is rotated on Y axis
@@ -202,10 +211,12 @@ class display(object):
 							# getting the sizes on X axis
 							y_rotation = object.rotation[1]
 							percent = 100 / (90 / y_rotation)
-							x_size = object.size[0]
+							x_size = display_size[0]
 							x0 = x_size / 100 * percent
 							x1 = x_size - x0
 							number = 255 - (255 / 100 * percent)
+
+							print(game.position)
 
 							# setting the RGB values
 							color0 = object.color[0] - number if object.color[0] >= number else 0
@@ -213,8 +224,8 @@ class display(object):
 							color2 = object.color[2] - number if object.color[2] >= number else 0
 
 							# drawing two 2D rectangles based on the data above
-							pygame.draw.rect(game.win, (color0, color1, color2), ((position[0], position[1]), (x0, object.size[1])))
-							pygame.draw.rect(game.win, object.color, ((position[0]+x0, position[1]), (x1, object.size[1])))
+							pygame.draw.rect(game.win, (color0, color1, color2), ((position[0], position[1]), (x0, display_size[1])))
+							pygame.draw.rect(game.win, object.color, ((position[0]+x0, position[1]), (x1, display_size[1])))
 
 			# adding the object if it is not in game.objects
 			if object not in game.objects:
