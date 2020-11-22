@@ -22,47 +22,63 @@ from datetime import datetime
 class Game(object):
 
 	# initializing function
-	def __init__(self, movement=False, width=10, height=10, title="My Game", icon_path="", rotation=[0, 0, 0], position=[0, 0, 0], resizable=False, fullscreen=False, velocity=1):
+	def __init__(self, movement=True, width=10, height=10, title="My Game", icon_path="", rotation=[0, 0, 0], position=[0, 0, 0], resizable=False, fullscreen=False, velocity=1):
 		
 		# checking if the user passed correct arguments; if not: raise an error
 		if type(movement) != bool:
-			raise TypeError("Movement should be a bool. If movement is False the player will not be able to move; otherwise the player will be able to move.")
+			error = "Movement should be a bool. If movement is False the player will not be able to move; otherwise the player will be able to move."
+			raise TypeError(error)
 
 		if type(width) != int and type(width) != float:
-			raise TypeError("Width should be an integer or a float. [Size of width of window] = width pixels.")
+			error = "Width should be an integer or a float. [Size of width of window] = width pixels."
+			raise TypeError(error)
 
 		if type(height) != int and type(height) != float:
-			raise TypeError("Height should be an integer or a float. [Size of height of window] = height pixels.")
+			error = "Height should be an integer or a float. [Size of height of window] = height pixels."
+			raise TypeError(error)
 
 		if type(title) != str:
-			raise TypeError("Title should be a string. Title is the title of window.")
+			error = "Title should be a string. Title is the title of window."
+			raise TypeError(error)
 
 		if type(icon_path) != str:
-			raise TypeError("Icon path should be a string. To set the icon to the window you need to provide its path.")
+			error = "Icon path should be a string. To set the icon to the window you need to provide its path."
+			raise TypeError(error)
 
 		if type(rotation) != list:
-			raise TypeError("Rotation should be a list.\nThe first number in the list corresponds to rotation in X direction; the second corresponds to rotation direction in Y direction and the third corresponds to rotation in Z direction.")
+			error = "Rotation should be a list.\nThe first number in the list corresponds to rotation in X direction; the second corresponds to rotation direction in Y direction and the third corresponds to rotation in Z direction."
+			raise TypeError(error)
 
 		if type(resizable) != bool:
-			raise TypeError("Resizable should be a bool. If resizable is set to true the user will be able to resize the window.")
+			error = "Resizable should be a bool. If resizable is set to true the user will be able to resize the window."
+			raise TypeError(error)
 
 		if type(fullscreen) != bool:
-			raise TypeError("Fullscreen should be a bool.")
+			error = "Fullscreen should be a bool."
+			raise TypeError(error)
 
 		if type(position) != list:
-			raise TypeError("Position should be a list.\nThe first number in the list corresponds to position of the player on X axis; the second corresponds to the position on Y axis and the third corresponds to the position on Z axis.")
+			error = "Position should be a list.\nThe first number in the list corresponds to position of the player on X axis; the second corresponds to the position on Y axis and the third corresponds to the position on Z axis."
+			raise TypeError(error)
 
 		if len(rotation) != 3:
-			raise ValueError("The length of rotation should be 3.\nThe first number in the list corresponds to rotation in X direction; second corresponds to rotation direction in Y direction and third corresponds to rotation in Z direction.")
+			error = "The length of rotation should be 3.\nThe first number in the list corresponds to rotation in X direction; second corresponds to rotation direction in Y direction and third corresponds to rotation in Z direction."
+			raise ValueError(error)
 
 		if len(position) != 3:
-			raise ValueError("The length of position should be 3.\nThe first number corresponds to position of the player on X axis; the second corresponds to the position on Y axis and third corresponds to the position on Z axis.")
+			error = "The length of position should be 3.\nThe first number corresponds to position of the player on X axis; the second corresponds to the position on Y axis and third corresponds to the position on Z axis."
+			raise ValueError(error)
+
+		if type(velocity) != int and type(velocity) != float:
+			error = "Velocity should be an integer or a float."
+			raise TypeError(error)
 
 		if icon_path:
 			try:
 				open(icon_path, "r").close()
 			except:
-				raise FileNotFoundError("The given icon path is incorrect.")
+				error = "The given icon path is incorrect."
+				raise FileNotFoundError(error)
 
 		# initializing the pygame to make the whole thing work
 		pygame.init()
@@ -118,13 +134,16 @@ class display(object):
 
 		# checking, if user have passsed correct arguments
 		if type(background_type) != str:
-			raise TypeError("The backrgound_color argument should be of type str.\nThere are possible values for background_type: \"color\" and \"image\".")
+			error = "The backrgound_color argument should be of type str.\nThere are possible values for background_type: \"color\" and \"image\"."
+			raise TypeError(error)
 		
 		if type(color) != list:
-			raise TypeError("The color argument should be of type list.")
+			error = "The color argument should be of type list."
+			raise TypeError(error)
 
 		if type(image_path) != str:
-			raise TypeError("The image_path argument should be of type str.")
+			error = "The image_path argument should be of type str."
+			raise TypeError(error)
 
 		# setting the background_type of the game to the given background_type
 		game.background_type = background_type
@@ -154,7 +173,8 @@ class display(object):
 			try:
 				open(image_path, "r").close()
 			except:
-				raise FileNotFoundError("The given image path is incorrect.")
+				error = "The given image path is incorrect."
+				raise FileNotFoundError(error)
 
 			game.image = pygame.image.load(image_path)
 
@@ -179,16 +199,18 @@ class display(object):
 			height = game.win.get_height()
 			# getting the width of the game window
 			width = game.win.get_width()
-			# getting the distance between the cube and the user
-			distance = game.position[2] - object.position[2]
+			# getting the X distance between the object and the user
+			distanceX = game.position[0] - object.position[0]
+			# getting the Z distance between the object and the user
+			distanceZ = game.position[2] - object.position[2]
 			# setting the size of the object that user will actually see
 			display_size = []
 			for size in object.size:
 				if game.position[2] < object.position[2]:
-					display_size.append(size / distance * 1000)
+					display_size.append(size / distanceZ * 1000)
 				else: display_size.append(0)
 			# creating a position list, storing the position of an object on a 3D coordinate plane
-			position = [width / 2 - object.position[0] - display_size[0] / 2, height / 2 - object.position[1] - display_size[1] / 2, object.position[2]]
+			position = [width / 2 - distanceX - display_size[0] / 2, height / 2 - object.position[1] - display_size[1] / 2, object.position[2]]
 
 			# if player is not "inside" of the object
 			if game.position[0] > position[0] + object.size[0] / 2 or \
@@ -224,12 +246,17 @@ class display(object):
 							# drawing two 2D rectangles based on the data above
 							pygame.draw.rect(game.win, (color0, color1, color2), ((position[0], position[1]), (x0, display_size[1])))
 							pygame.draw.rect(game.win, object.color, ((position[0]+x0, position[1]), (x1, display_size[1])))
+					# else:
+						# TODO
+						# write code for displaying object when it is to the right or to the left of the player
+						# pass
 
 			# adding the object if it is not in game.objects
 			if object not in game.objects:
 				game.objects.append(object)
 		else:
-			raise TypeError("You should provide the object of supported type by this library.")
+			error = "You should provide the object of supported type by this library."
+			raise TypeError(error)
 
 		# update the screen so that user will see the difference
 		pygame.display.update()
@@ -244,13 +271,15 @@ def start_game(game, code=None):
 
 	# checking if user has passed correct arguments
 	if type(game) != Game:
-		raise TypeError("Game should be a Game object. To create a Game object you need to import it from this library.")
+		error = "Game should be a Game object. To create a Game object you need to import it from this library."
+		raise TypeError(error)
 
 	if code is not None:
 		# if user have passed the pygame_code argument but it is not a function...
 		if not callable(code):
 			# ...raise an error
-			raise TypeError("The pygame_code argument should be a function. Make sure you have not added \"(\" and \")\" (brackets).")
+			error = "The pygame_code argument should be a function. Make sure you have not added \"(\" and \")\" (brackets)."
+			raise TypeError(error)
 
 	# preparing to count FPS
 	start = datetime.now().second
@@ -331,11 +360,14 @@ def start_game(game, code=None):
 def rotate(object, axis="y", velocity=0.1):
 	# error-checking
 	if type(axis) != str:
-		raise TypeError("Axis should be a string. Axis should be \"x\"or  \"y\" or \"z\".")
+		error = "Axis should be a string. Axis should be \"x\"or  \"y\" or \"z\"."
+		raise TypeError(error)
 	if axis not in ["x", "y", "z"]:
-		raise ValueError("Axis should be \"x\" or \"y\" or \"z\".")
+		error = "Axis should be \"x\" or \"y\" or \"z\"."
+		raise ValueError(error)
 	if type(velocity) not in [int, float]:
-		raise TypeError("Velocity should be int or float.")
+		error = "Velocity should be int or float."
+		raise TypeError(error)
 
 	# checking the type of the object
 	if type(object) == Cube:
@@ -350,7 +382,8 @@ def rotate(object, axis="y", velocity=0.1):
 			object.rotation[2] += velocity
 	# if object is not supported by the library: raise an error
 	else:
-		raise TypeError("You should provide the object of supported types by this library.")
+		error = "You should provide the object of supported types by this library."
+		raise TypeError(error)
 
 # class for creating Cube objects
 class Cube(object):
@@ -360,23 +393,33 @@ class Cube(object):
 
 		# error-checking
 		if type(name) != str:
-			raise TypeError("The name of the cube should be a string.")
+			error = "The name of the cube should be a string."
+			raise TypeError(error)
 		if type(size) != list:
-			raise TypeError("Size should be a list.\nThe first number in the list corresponds to size on X-axis; the second corresponds to size on Y-axis and the third corresponds to size on Z-axis.")
+			error = "Size should be a list.\nThe first number in the list corresponds to size on X-axis; the second corresponds to size on Y-axis and the third corresponds to size on Z-axis."
+			raise TypeError(error)
 		if len(size) != 3:
-			raise ValueError("The length of size should be 3.")
+			error = "The length of size should be 3."
+			raise ValueError(error)
 		if type(color) != list:
-			raise TypeError("Color should be a list.\nThe first number in the list corresponds to the amount of red color (from 0 to 255); the second corresponds to amount of green color (from 0 to 255) and the third corresponds to the amount of blue color (from 0 to 255).")
+			error = "Color should be a list.\nThe first number in the list corresponds to the amount of red color (from 0 to 255); the second corresponds to amount of green color (from 0 to 255) and the third corresponds to the amount of blue color (from 0 to 255)."
+			raise TypeError(error)
 		if len(color) != 3:
-			raise ValueError("The length of color should be 3.")
+			error = "The length of color should be 3."
+			raise ValueError(error)
 		for number in color:
-			if number > 255 or number < 0: raise ValueError("Every number in color should be in range 0 and 256 (it should be >= 0 and <= 255).")
+			if number > 255 or number < 0:
+				error = "Every number in color should be in range 0 and 256 (it should be >= 0 and <= 255)."
+				raise ValueError(error)
 		if type(position) != list:
-			raise TypeError("Position should be a list.\nThe first number in the list corresponds to the position on X-axis; the second corresponds to the position on Y-axis and the third corresponds to the position on Z-axis.")
+			error = "Position should be a list.\nThe first number in the list corresponds to the position on X-axis; the second corresponds to the position on Y-axis and the third corresponds to the position on Z-axis."
+			raise TypeError(error)
 		if type(rotation) != list:
-			raise TypeError("Rotation should be a list.\nThe first number in the list corresponds to the rotation on X-axis; the second corresponds to the rotation on Y-axis and the third corresponds to the rotation on Z-axis.")
+			error = "Rotation should be a list.\nThe first number in the list corresponds to the rotation on X-axis; the second corresponds to the rotation on Y-axis and the third corresponds to the rotation on Z-axis."
+			raise TypeError(error)
 		if len(rotation) != 3:
-			raise ValueError("The length of rotation should be 3.")
+			error = "The length of rotation should be 3."
+			raise ValueError(error)
 		
 		self.size = size
 		self.color = color
@@ -394,11 +437,13 @@ def hex_to_rgb(hex):
 	
 	# checking, if the user passed correct argument
 	if type(hex) != str:
-		raise TypeError("You need to pass one argument, which should represent the hex color in a form of string.")
+		error = "You need to pass one argument, which should represent the hex color in a form of string."
+		raise TypeError(error)
 
 	# if the first character of color is not "#": return an error
 	if hex[0] != "#":
-		raise ValueError("The first argument should represent a hex color in a form of string. The first character should be \"#\".")
+		error = "The first argument should represent a hex color in a form of string. The first character should be \"#\"."
+		raise ValueError(error)
 
 	# removing "#" from color
 	hex = hex.lstrip("#")
@@ -407,4 +452,5 @@ def hex_to_rgb(hex):
 		# returning a converted color
 		return tuple(int(hex[i:i+2], 16) for i in (0, 2, 4))
 	except:
-		raise ValueError("Couldn't convert the given hex color to rgb. Try a different one.")
+		error = "Couldn't convert the given hex color to rgb. Try a different one."
+		raise ValueError(error)
