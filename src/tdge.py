@@ -181,9 +181,6 @@ class display(object):
 			# displaying the image on a screen
 			game.win.blit(game.image, (0, 0))
 
-		# update the screen so that user will see the difference
-		pygame.display.update()
-
 	# this function handles the drawing objects on the display
 	def draw(game, object):
 
